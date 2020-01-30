@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using _2ndSemesterProject.Models;
+using System.Globalization;
 
 namespace _2ndSemesterProject.Controllers
 {
@@ -30,6 +31,22 @@ namespace _2ndSemesterProject.Controllers
 
         public IActionResult Contact()
         {
+            List<string> CountryList = new List<string>();
+
+            CultureInfo[] cInfoList = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
+
+            foreach (var cInfo in cInfoList)
+            {
+                RegionInfo r = new RegionInfo(cInfo.LCID);
+
+                if (!CountryList.Contains(r.EnglishName))
+                    CountryList.Add(r.EnglishName);
+            }
+
+            CountryList.Sort();
+            
+            ViewBag.CountryList = CountryList;
+
             return View();
         }
 

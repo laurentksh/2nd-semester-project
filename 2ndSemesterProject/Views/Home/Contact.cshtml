@@ -5,55 +5,60 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" asp-append-version="true" href="~/css/contact.css" />
-    <title>
-        @{ViewData["Title"] = "Contact us";}
-    </title>
+    <title>@ViewData["Title"]</title>
 </head>
 <body>
     <h1>@ViewData["Title"]</h1>
 
     <div class="container">
-        <form action="/action_page.php">
+        @using (Html.BeginForm("Contact", "HomeController")) //Begin form generation
+        {
             <div class="row">
                 <div class="col-25">
-                    <label for="fname">First Name</label>
+                    @Html.Label("FirstName", "First name")
                 </div>
                 <div class="col-75">
-                    <input type="text" id="fname" name="firstname" placeholder="Your name..">
+                    @Html.TextBox("FirstName", null, new { @class = "form-control", @placeholder = "Your name..."})
                 </div>
             </div>
             <div class="row">
                 <div class="col-25">
-                    <label for="lname">Last Name</label>
+                    @Html.Label("LastName", "Last name")
                 </div>
                 <div class="col-75">
-                    <input type="text" id="lname" name="lastname" placeholder="Your last name..">
+                    @Html.TextBox("LastName", null, new { @class = "form-control", @placeholder = "Your last name..."})
                 </div>
             </div>
             <div class="row">
                 <div class="col-25">
-                    <label for="country">Country</label>
+                    @Html.Label("CountryList", "Country")
                 </div>
                 <div class="col-75">
-                    <select id="country" name="country">
-                        <option value="swiss">Switzerland</option>
-                        <option value="canada">Canada</option>
-                        <option value="usa">USA</option>
-                    </select>
+                    @{ Html.DropDownList("CountryList", new SelectList(ViewBag.CountryList), new { @class = "form-control" }); }
                 </div>
             </div>
             <div class="row">
                 <div class="col-25">
-                    <label for="subject">Subject</label>
+                    @Html.Label("Subject", "Subject")
                 </div>
                 <div class="col-75">
-                    <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
+                    @Html.TextBox("Subject", null, new { @class = "form-control"})
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    @Html.Label("Message", "Message")
+                </div>
+                <div class="col-75">
+                    @Html.TextArea("Message", null, new { @class = "form-control", @style = "height:200px" })
                 </div>
             </div>
             <div class="row">
                 <input type="submit" value="Submit">
             </div>
-        </form>
+
+            @Html.AntiForgeryToken() //Generate the Anti-CSRF token
+        }
     </div>
 </body>
 </html>
