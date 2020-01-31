@@ -3,6 +3,7 @@
 }
 body {
     background-color: #f2f2f2;
+    height: auto;
 }
 input[type=text], select, textarea {
     width: 100%;
@@ -16,16 +17,17 @@ label {
     display: inline-block;
 }
 input[type=submit] {
-    background-color: #4CAF50;
-    color: white;
+    background-color: white;
+    color: black;
+    border: 2px solid #0aa4d2;
     padding: 12px 20px;
-    border: none;
     border-radius: 4px;
     cursor: pointer;
     float: right;
 }
 input[type=submit]:hover {
-    background-color: #45a049;
+    background-color: #0aa4d2;
+    color: white;
 }
 .col-25 {
     float: left;
