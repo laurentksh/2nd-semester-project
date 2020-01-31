@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Contact us";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" asp-append-version="true" href="~/css/contact.css" />
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div class="container">
+        <h1>@ViewData["Title"]</h1>
+        @using (Html.BeginForm("Contact", "Home")) //Begin form generation
+        {
+            <div class="row">
+                <div class="col-25">
+                    @Html.Label("FirstName", "First name")
+                </div>
+                <div class="col-75">
+                    @Html.TextBox("FirstName", null, new { @class = "form-control", @placeholder = "Your name..." })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    @Html.Label("LastName", "Last name")
+                </div>
+                <div class="col-75">
+                    @Html.TextBox("LastName", null, new { @class = "form-control", @placeholder = "Your last name..." })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    @Html.Label("CountryList", "Country")
+                </div>
+                <div class="col-75">
+                    @Html.DropDownList("CountryList", new SelectList(ViewBag.CountryList), new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    @Html.Label("Subject", "Subject")
+                </div>
+                <div class="col-75">
+                    @Html.TextBox("Subject", null, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    @Html.Label("Message", "Message")
+                </div>
+                <div class="col-75">
+                    @Html.TextArea("Message", null, new { @class = "form-control", @style = "height:100px" })
+                </div>
+            </div>
+            <div class="row">
+                <input type="submit" value="Submit">
+            </div>
+
+            @Html.AntiForgeryToken()//Generate the Anti-CSRF token
+        }
+    </div>
+</body>
+</html>

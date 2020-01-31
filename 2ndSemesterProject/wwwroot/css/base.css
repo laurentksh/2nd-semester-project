@@ -1,0 +1,33 @@
+﻿.sticky {
+    position: fixed;
+    top: 0px;
+    width: 100%;
+}
+.maincontainer {
+    margin: 56px 15% 0 15%;
+    min-height: 1080px;
+}
+body {
+    width: 100%;
+    height:auto;
+}
+nav.navbar {
+    background-color: #0aa4d2 !important;
+    z-index: 9999;
+    margin: 0px !important;
+}
+li.nav-item .nav-link.lien,
+li.nav-item .nav-link.lien:hover,
+li.nav-item .nav-link.lien:focus {
+    color: white;
+    transition-duration: .5s;
+}
+.navbar-light .navbar-nav .nav-link:hover {
+    background-color: rgb(10, 126, 160) !important;
+    box-shadow: 3px 3px 3px rgb(10, 126, 160) !important;
+    transition-duration: 1s;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
