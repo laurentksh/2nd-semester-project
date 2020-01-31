@@ -34,7 +34,7 @@
                     @Html.Label("CountryList", "Country")
                 </div>
                 <div class="col-75">
-                    @{ Html.DropDownList("CountryList", new SelectList(ViewBag.CountryList), new { @class = "form-control" }); }
+                    @Html.DropDownList("CountryList", new SelectList(ViewBag.CountryList), new { @class = "form-control" })
                 </div>
             </div>
             <div class="row">

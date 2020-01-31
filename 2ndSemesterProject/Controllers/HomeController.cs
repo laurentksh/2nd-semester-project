@@ -44,8 +44,8 @@ namespace _2ndSemesterProject.Controllers
             }
 
             CountryList.Sort();
-            
-            ViewBag.CountryList = CountryList;
+
+            ViewBag.CountryList = CountryList.Prepend("Select a country...");
 
             return View();
         }
