@@ -14,6 +14,7 @@ body {
 }
 .navbar {
     background: #0aa4d2 !important;
+    z-index: 9999;
 }
 li.nav-item .nav-link.lien,
 li.nav-item .nav-link.lien:hover,

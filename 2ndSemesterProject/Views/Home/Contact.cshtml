@@ -9,8 +9,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>@ViewData["Title"]</h1>
-        @using (Html.BeginForm("Contact", "HomeController")) //Begin form generation
+        @using (Html.BeginForm("Contact", "Home")) //Begin form generation
         {
             <div class="row">
                 <div class="col-25">
@@ -33,7 +32,7 @@
                     @Html.Label("CountryList", "Country")
                 </div>
                 <div class="col-75">
-                    @{ Html.DropDownList("CountryList", new SelectList(ViewBag.CountryList), new { @class = "form-control" }); }
+                    @Html.DropDownList("CountryList", new SelectList(ViewBag.CountryList), new { @class = "form-control" })
                 </div>
             </div>
             <div class="row">
