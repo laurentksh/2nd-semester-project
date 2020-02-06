@@ -52,3 +52,14 @@ input[type=submit]:hover {
         margin-top: 0;
     }
 }
+
+.container .contact-form {
+    margin-top: 145px;
+    background: rgba(237, 237, 237, 0.9);
+    padding-top: 10px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 10px;
+    border-radius: 3px;
+    border: 1px solid #0aa4d2;
+}

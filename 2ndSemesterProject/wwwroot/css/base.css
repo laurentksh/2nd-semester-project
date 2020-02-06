@@ -5,7 +5,7 @@
 }
 .maincontainer {
     margin: 56px 15% 0 15%;
-    min-height: 1080px;
+    min-height: auto;
 }
 body {
     width: 100%;
@@ -15,6 +15,12 @@ nav.navbar {
     background-color: #0aa4d2 !important;
     z-index: 9999;
     margin: 0px !important;
+}
+nav.navbar .navbar-brand,
+nav.navbar .navbar-brand:hover,
+nav.navbar .navbar-brand:active,
+nav.navbar .navbar-brand:focus {
+    color: white;
 }
 li.nav-item .nav-link.lien,
 li.nav-item .nav-link.lien:hover,
