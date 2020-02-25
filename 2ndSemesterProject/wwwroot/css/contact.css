@@ -24,10 +24,12 @@ input[type=submit] {
     border-radius: 4px;
     cursor: pointer;
     float: right;
+    transition-duration: .2s;
 }
 input[type=submit]:hover {
     background-color: #0aa4d2;
     color: white;
+    transition-duration: .2s;
 }
 .col-25 {
     float: left;
@@ -53,13 +55,3 @@ input[type=submit]:hover {
     }
 }
 
-.container .contact-form {
-    margin-top: 145px;
-    background: rgba(237, 237, 237, 0.9);
-    padding-top: 10px;
-    padding-left: 25px;
-    padding-right: 25px;
-    padding-bottom: 10px;
-    border-radius: 3px;
-    border: 1px solid #0aa4d2;
-}

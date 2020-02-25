@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" asp-append-version="true" href="~/css/site.css" />
     <link rel="stylesheet" asp-append-version="true" href="~/css/base.css" />
-
+    <link rel="shortcut icon" href="~/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="~/images/favicon.ico" type="image/x-icon">
 </head>
 <body>
     <header class="sticky">
@@ -30,6 +31,9 @@
                         <li class="nav-item">
                             <a class="nav-link lien" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link lien" asp-area="" asp-controller="Home" asp-action="Myfolders">My Folders</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -40,10 +44,11 @@
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer border-top">
         <div class="container">
             &copy; 2020 - _2ndSemesterProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <button style="float:right;margin-right:0px;margin-left:5px;line-height:30px;margin-top:12px" id="btnnewsletter" class="newsbtn" type="submit">Subscribe</button>
+            <input style="float:right;line-height:30px;margin-top:12px;border: 2px solid #0aa4d2;border-radius:3px;width:30%;padding:1px;" class="newsmail" type="text" placeholder="Email address" name="mail" required>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
