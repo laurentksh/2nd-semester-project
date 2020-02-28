@@ -24,10 +24,12 @@ input[type=submit] {
     border-radius: 4px;
     cursor: pointer;
     float: right;
+    transition-duration: .2s;
 }
 input[type=submit]:hover {
     background-color: #0aa4d2;
     color: white;
+    transition-duration: .2s;
 }
 .col-25 {
     float: left;
@@ -52,3 +54,4 @@ input[type=submit]:hover {
         margin-top: 0;
     }
 }
+

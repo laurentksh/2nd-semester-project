@@ -4,8 +4,16 @@
     width: 100%;
 }
 .maincontainer {
-    margin: 56px 15% 0 15%;
-    min-height: 1080px;
+    margin: 56px 15% 156px 15%;
+    height: auto;
+    margin-top: 145px;
+    background: rgba(237, 237, 237, 0.9);
+    padding-top: 10px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 10px;
+    border-radius: 3px;
+    border: 1px solid #0aa4d2;
 }
 body {
     width: 100%;
@@ -15,6 +23,12 @@ nav.navbar {
     background-color: #0aa4d2 !important;
     z-index: 9999;
     margin: 0px !important;
+}
+nav.navbar .navbar-brand,
+nav.navbar .navbar-brand:hover,
+nav.navbar .navbar-brand:active,
+nav.navbar .navbar-brand:focus {
+    color: white;
 }
 li.nav-item .nav-link.lien,
 li.nav-item .nav-link.lien:hover,
@@ -31,3 +45,5 @@ li.nav-item .nav-link.lien:focus {
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
 }
+
+

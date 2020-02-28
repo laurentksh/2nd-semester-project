@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "AllViews";
+}
+
+<h1>AllViews</h1>
+
+<table>
+    <tr>
+        <th>Id</th>
+        <th>DisplayName</th>
+        <th>Parameters</th>
+    </tr>
+
+    @foreach (Microsoft.AspNetCore.Mvc.Abstractions.ActionDescriptor i in ViewBag.AllViews)
+    {
+        <tr>
+            <td>
+                @i.Id
+            </td>
+            <td>
+                @i.DisplayName
+            </td>
+            <td>
+                <a href="@Url.RouteUrl(i.AttributeRouteInfo.Name)">link</a>
+            </td>
+        </tr>
+    }
+</table>

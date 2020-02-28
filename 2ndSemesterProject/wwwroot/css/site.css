@@ -1,29 +1,24 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
-
 a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
 }
-
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
 }
-
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
-
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
-
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -34,34 +29,29 @@ html {
     font-size: 16px;
   }
 }
-
 .border-top {
   border-top: 1px solid #0aa4d2 !important;
 }
 .border-bottom {
   border-bottom: 1px solid #e5e5e5;
 }
-
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
-
 button.accept-policy {
   font-size: 1rem;
   line-height: inherit;
 }
-
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
   position: relative;
   min-height: 100%;
 }
-
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    background-color: #f2f2f2;
+    /*background-color: #f2f2f2;*/
     background-image: url("../images/header_data_1.jpg");
     background-repeat: no-repeat;
     background-position: center;
@@ -74,4 +64,34 @@ body {
     white-space: nowrap;
     line-height: 60px; /* Vertically center the text there */
     background: rgb(237, 237, 237);
+}
+button[type=submit] {
+    color: black;
+    background-color: white;
+    border-radius: 4px;
+    border: 2px solid #0aa4d2;
+}
+button[type=submit]:hover,
+button[type=submit]:active,
+button[type=submit]:focus,
+button[type=submit]:visited {
+    background-color: #0aa4d2 !important;
+    color: white !important;
+    transition-duration: .2s !important;
+    border-color: #0aa4d2 !important;
+}
+input[type=submit] {
+    color: black;
+    background-color: white;
+    border-radius: 4px;
+    border: 2px solid #0aa4d2;
+}
+input[type=submit]:hover,
+input[type=submit]:active,
+input[type=submit]:focus,
+input[type=submit]:visited {
+    background-color: #0aa4d2 !important;
+    color: white !important;
+    transition-duration: .2s !important;
+    border-color: #0aa4d2 !important;
 }
