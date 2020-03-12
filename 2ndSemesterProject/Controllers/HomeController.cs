@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace _2ndSemesterProject.Controllers
 {
+    [Route("/", Name = "Home", Order = -1)]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -23,16 +24,19 @@ namespace _2ndSemesterProject.Controllers
             _provider = provider;
         }
 
+        [Route("")]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Route("Privacy")]
         public IActionResult Privacy()
         {
             return View();
         }
 
+        [Route("Debug/AllViews")]
         public IActionResult AllViews()
         {
             var routes = _provider.ActionDescriptors.Items.ToList();
@@ -42,6 +46,7 @@ namespace _2ndSemesterProject.Controllers
             return View();
         }
 
+        [Route("Contact")]
         public IActionResult Contact()
         {
             List<string> CountryList = new List<string>();
@@ -63,6 +68,7 @@ namespace _2ndSemesterProject.Controllers
             return View();
         }
 
+        [Route("Error", Name = "Error")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

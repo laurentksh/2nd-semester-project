@@ -27,11 +27,40 @@ namespace _2ndSemesterProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Load the DB connection string.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            // Anti-Forgery
+            var options = new Microsoft.AspNetCore.Antiforgery.AntiforgeryOptions
+            {
+                FormFieldName = "ASP-AF",
+                HeaderName = "ASP-AF-HEADER",
+                SuppressXFrameOptionsHeader = false
+            };
+
+            services.AddAntiforgery(new Action<Microsoft.AspNetCore.Antiforgery.AntiforgeryOptions>((x) => x = options));
+
+            // Localization
+            var options2 = new Microsoft.Extensions.Localization.LocalizationOptions
+            {
+
+            };
+
+            services.AddLocalization(new Action<Microsoft.Extensions.Localization.LocalizationOptions>((y) => y = options2));
+
+            // API Versioning
+            var options3 = new Microsoft.AspNetCore.Mvc.Versioning.ApiVersioningOptions
+            {
+                
+            };
+
+            services.AddApiVersioning(new Action<Microsoft.AspNetCore.Mvc.Versioning.ApiVersioningOptions>((z) => z = options3));
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
@@ -46,10 +75,11 @@ namespace _2ndSemesterProject
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
