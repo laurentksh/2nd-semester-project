@@ -5,13 +5,17 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using _2ndSemesterProject.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Localization;
+using _2ndSemesterProject.Models;
 
 namespace _2ndSemesterProject
 {
@@ -32,34 +36,42 @@ namespace _2ndSemesterProject
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Anti-Forgery
-            var options = new Microsoft.AspNetCore.Antiforgery.AntiforgeryOptions
+            var options = new AntiforgeryOptions
             {
                 FormFieldName = "ASP-AF",
                 HeaderName = "ASP-AF-HEADER",
                 SuppressXFrameOptionsHeader = false
             };
 
-            services.AddAntiforgery(new Action<Microsoft.AspNetCore.Antiforgery.AntiforgeryOptions>((x) => x = options));
+            services.AddAntiforgery(o1 => o1 = options);
 
             // Localization
-            var options2 = new Microsoft.Extensions.Localization.LocalizationOptions
-            {
+            var options2 = new LocalizationOptions();
 
-            };
-
-            services.AddLocalization(new Action<Microsoft.Extensions.Localization.LocalizationOptions>((y) => y = options2));
+            services.AddLocalization(o2 => o2 = options2);
 
             // API Versioning
-            var options3 = new Microsoft.AspNetCore.Mvc.Versioning.ApiVersioningOptions
+            var options3 = new ApiVersioningOptions
             {
                 
             };
 
-            services.AddApiVersioning(new Action<Microsoft.AspNetCore.Mvc.Versioning.ApiVersioningOptions>((z) => z = options3));
+            services.AddApiVersioning(o3 => o3 = options3);
+
+            // Identity
+
+            var identityOpt = new IdentityOptions();
+            identityOpt.SignIn.RequireConfirmedEmail = true;
+            identityOpt.Password.RequiredLength = 8;
+            identityOpt.Password.RequiredUniqueChars = 4;
+            identityOpt.Password.RequireNonAlphanumeric = false;
+            identityOpt.User.RequireUniqueEmail = true;
+
+            services.AddIdentity<AppUser, AppRole>(o4 => o4 = identityOpt)
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders().AddDefaultUI();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -68,13 +80,10 @@ namespace _2ndSemesterProject
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-            }
-            else
-            {
+            } else {
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
@@ -87,7 +96,7 @@ namespace _2ndSemesterProject
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

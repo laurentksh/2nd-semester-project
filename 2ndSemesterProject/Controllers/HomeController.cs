@@ -25,6 +25,7 @@ namespace _2ndSemesterProject.Controllers
         }
 
         [Route("")]
+        [HttpGet("Index")]
         public IActionResult Index()
         {
             return View();

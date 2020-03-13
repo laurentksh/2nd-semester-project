@@ -12,6 +12,7 @@ namespace _2ndSemesterProject.Controllers
     {
         // GET: My-Cloud/
         [HttpGet("")]
+        [HttpGet("Index")]
         public ActionResult Index()
         {
             return View();
