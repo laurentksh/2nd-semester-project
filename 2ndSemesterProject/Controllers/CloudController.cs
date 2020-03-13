@@ -7,49 +7,49 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace _2ndSemesterProject.Controllers
 {
-    [Route("/my-cloud", Name = "cloud")]
+    [Route("My-Cloud", Name = "Cloud")]
     public class CloudController : Controller
     {
-        // GET: my-cloud
-        [Route("/")]
+        // GET: My-Cloud/
+        [HttpGet("")]
+        [HttpGet("Index")]
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: my-cloud/Details/5
-        [Route("/Details/{id}")]
+        // GET: My-Cloud/Details/5
+        [HttpGet("Details/{id}")]
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: my-cloud/Create
-        [Route("/Create")]
+        // GET: My-Cloud/Create
+        [HttpGet("Create")]
         public ActionResult Create()
         {
             return View();
         }
 
-        // GET: my-cloud/Edit/5
-        [Route("/Edit/{id}")]
+        // GET: My-Cloud/Edit/5
+        [HttpGet("Edit/{id}")]
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // GET: my-cloud/Delete/5
-        [Route("/Delete/{id}")]
+        // GET: My-Cloud/Delete/5
+        [HttpGet("Delete/{id}")]
         public ActionResult Delete(int id)
         {
             return View();
         }
 
 
-        // POST: my-cloud/Create
-        [HttpPost]
+        // POST: My-Cloud/Create
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        [Route("/Create")]
         public ActionResult Create(IFormCollection collection)
         {
             try
@@ -64,10 +64,9 @@ namespace _2ndSemesterProject.Controllers
             }
         }
 
-        // POST: my-cloud/Edit/5
-        [HttpPost]
+        // POST: My-Cloud/Edit/5
+        [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
-        [Route("/Edit/{id}")]
         public ActionResult Edit(int id, IFormCollection collection)
         {
             try
@@ -82,10 +81,9 @@ namespace _2ndSemesterProject.Controllers
             }
         }
 
-        // POST: my-cloud/Delete/5
-        [HttpPost]
+        // POST: My-Cloud/Delete/5
+        [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
-        [Route("/Delete/{id}")]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try
