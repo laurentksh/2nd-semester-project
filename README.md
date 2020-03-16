@@ -5,4 +5,4 @@
 
 Projet de service cloud proposant l'hébérgement de fichiers.
 
-Accessible ici: http://2ndsemesterproject-dev-as.azurewebsites.net/
+Accessible ici (master): http://2ndsemesterproject-dev-as.azurewebsites.net/
