@@ -15,7 +15,7 @@ namespace _2ndSemesterProject.Controllers
     [Route("/", Name = "Home", Order = -1)]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;   
+        private readonly ILogger<HomeController> _logger;
         private readonly IActionDescriptorCollectionProvider _provider;
 
         public HomeController(ILogger<HomeController> logger, IActionDescriptorCollectionProvider provider)
