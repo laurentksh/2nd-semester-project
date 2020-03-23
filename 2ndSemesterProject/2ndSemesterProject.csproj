@@ -23,11 +23,25 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.cs" />
+    <Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.Designer.cs" />
     <Compile Remove="Data\Migrations\20200313222839_InitialCreate.cs" />
     <Compile Remove="Data\Migrations\20200313222839_InitialCreate.Designer.cs" />
     <Compile Remove="Data\Migrations\20200313223312_InitialCreate.cs" />
     <Compile Remove="Data\Migrations\20200313223312_InitialCreate.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200323002539_Initial.cs" />
+    <Compile Remove="Data\Migrations\20200323002539_Initial.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200323011816_Initial.cs" />
+    <Compile Remove="Data\Migrations\20200323011816_Initial.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200323012014_Initial.cs" />
+    <Compile Remove="Data\Migrations\20200323012014_Initial.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200323012348_Initial.cs" />
+    <Compile Remove="Data\Migrations\20200323012348_Initial.Designer.cs" />
     <Compile Remove="HomeController2.cs" />
+    <Compile Remove="Migrations\20200323012826_Initial.cs" />
+    <Compile Remove="Migrations\20200323012826_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200323014547_Initial.cs" />
+    <Compile Remove="Migrations\20200323014547_Initial.Designer.cs" />
   </ItemGroup>
 
 
@@ -65,6 +79,11 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
   </ItemGroup>
 
 

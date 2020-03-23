@@ -1,6 +1,7 @@
-﻿@{ 
-    var date = DateTime.Now.ToString("dd/MM/yyyy");
+﻿@{
+    var date = DateTime.Now.ToString("dd/MM/yyyy hh:mm");
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,38 +28,39 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link lien" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link lien" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link lien" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link lien" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link lien" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                            <a class="nav-link lien" asp-controller="Home" asp-action="Contact">Contact</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link lien" asp-area="" asp-controller="Home" asp-action="Myfolders">My Folders</a>
+                            <a class="nav-link lien" asp-controller="My-Cloud" asp-action="Index">My Cloud</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="maincontainer">
+    <div class="main-container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
     <footer class="border-top footer border-top">
         <div class="container">
-            &copy; 2020 - _2ndSemesterProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2020 - _2ndSemesterProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> - 
             <span>@date</span>
-            <button style="float:right;margin-right:0px;margin-left:5px;line-height:30px;margin-top:12px" id="btnnewsletter" class="newsbtn" type="submit">Subscribe</button>
-            <input style="float:right;line-height:30px;margin-top:12px;border: 2px solid #0aa4d2;border-radius:3px;width:30%;padding:1px;" class="newsmail" type="text" placeholder="Email address" name="mail" required>
+            <button class="news-btn" type="submit">Subscribe</button>
+            <input class="news-mail" type="text" placeholder="Email address" name="Email" required>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -15,6 +15,9 @@ namespace _2ndSemesterProject.Controllers
         [HttpGet("Index")]
         public ActionResult Index()
         {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
             return View();
         }
 

@@ -19,6 +19,7 @@ a {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -42,8 +43,27 @@ button.accept-policy {
   font-size: 1rem;
   line-height: inherit;
 }
+
+.news-btn {
+    float:right;
+    margin-right:0px;
+    margin-left:5px;
+    line-height:30px;
+    margin-top:12px
+}
+
+.news-mail {
+    float:right;
+    line-height:30px;
+    margin-top:12px;
+    border: 2px solid #0aa4d2;
+    border-radius:3px;
+    width:30%;
+    padding:1px;
+}
 /* Sticky footer styles
 -------------------------------------------------- */
+
 html {
   position: relative;
   min-height: 100%;

@@ -1,17 +1,51 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
-    
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <h2 class="text-left">Presentation of our project :</h2>
-    <p class="text-left">In this project for the courses at the EPSIC, we chose with my partner to create a website hosting in backend c#</p>
-    <p class="text-left">Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p class="text-left">On this application, you can upload your files that will be stored in our Azure servers. You can also use this application to store your images on the cloud!</p>
-    <h2 class="text-left">Accédez à vos fichiers</h2>
-    <p class="text-left">nous vous offrons une plateforme centralisée pour le stockage, le partage de fichiers et la synchronisation. Que vous soyez au bureau ou en déplacement, vos fichiers sont synchronisés sur tous vos appareils et accessibles en temps réel. Accédez à votre compte avec Internet depuis votre navigateur.
-    </p>
-</div>
+@section Head {
+    <link rel="stylesheet" asp-append-version="true" href="~/css/FileManager.css" />
+    <link rel="stylesheet" asp-append-version="true" href="~/js/FileManager.js" />
+}
 
+<div class="container">
+    <div class="row">
+        <div class="fm-sidebar col-sm-1">
+            <div class="fm-sidebar-headers">
+
+            </div>
+            <div id="fm-folders" class="fm-sidebar-folders">
+                <!-- Example folder named "New Folder 1" -->
+                <div id="folder-1" data-folder-id="BF641DBF-7B8F-40FA-B8EE-480579E93B00">
+                    <p>New folder 1</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="fm-content col-xl">
+            <div class="container">
+                <!-- File Container -->
+                <div class="row">
+                    <div class="col">
+                        <!-- Files -->
+
+                        <div class="fm-file">
+                            <div class="card">
+                                <img id="file-%id%-imgpreview" src="%FILE_PREVIEW_URL%" class="card-img-top" alt="%FILE_NAME% - Preview" />
+
+                                <div class="card-body">
+                                    <h5 class="card-title">%FILE_NAME%</h5>
+                                    <h6 class="card-subtitle">%FILE_INFO%</h6>
+                                </div>
+
+                                <div class="card-body">
+                                    <a id="file-%id%-download" href="%FILE_DOWNLOAD_LINK%" class="btn btn-primary card-link"><i class="fas fa-file-download"></i></a>
+                                    <a id="file-%id%-more" class="btn btn-outline-secondary card-link"><i class="fas fa-ellipsis-h"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

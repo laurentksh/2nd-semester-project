@@ -71,7 +71,8 @@ namespace _2ndSemesterProject
 
             services.AddIdentity<AppUser, AppRole>(o4 => o4 = identityOpt)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders().AddDefaultUI();
+                .AddDefaultTokenProviders()
+                .AddDefaultUI();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -80,6 +81,11 @@ namespace _2ndSemesterProject
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            using (ApplicationDbContext dbContext = app.ApplicationServices.GetRequiredService<ApplicationDbContext>())
+            {
+                dbContext.Database.EnsureCreated();
+            }
+
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
