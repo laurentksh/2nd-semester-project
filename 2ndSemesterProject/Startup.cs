@@ -32,10 +32,9 @@ namespace _2ndSemesterProject
         public void ConfigureServices(IServiceCollection services)
         {
             // Load the DB connection string.
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContextPool<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-
+                    Configuration.GetConnectionString("DefaultConnection")), 128);
 
             // Anti-Forgery
             var options = new AntiforgeryOptions
@@ -81,10 +80,10 @@ namespace _2ndSemesterProject
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            using (ApplicationDbContext dbContext = app.ApplicationServices.GetRequiredService<ApplicationDbContext>())
+            /*using (ApplicationDbContext dbContext = app.ApplicationServices.GetRequiredService<ApplicationDbContext>())
             {
                 dbContext.Database.EnsureCreated();
-            }
+            }*/
 
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
