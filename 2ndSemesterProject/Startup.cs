@@ -80,10 +80,15 @@ namespace _2ndSemesterProject
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            /*using (ApplicationDbContext dbContext = app.ApplicationServices.GetRequiredService<ApplicationDbContext>())
+            using (IServiceScope scope = app.ApplicationServices.CreateScope())
             {
-                dbContext.Database.EnsureCreated();
-            }*/
+                //Get services here
+
+                using (ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+                {
+                    dbContext.Database.EnsureCreated();
+                }
+            }
 
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
