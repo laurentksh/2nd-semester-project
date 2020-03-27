@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using _2ndSemesterProject.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace _2ndSemesterProject.Controllers.Api.v1
@@ -13,16 +14,20 @@ namespace _2ndSemesterProject.Controllers.Api.v1
     {
         // GET: api/{version}/account
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            return new BadRequestResult();
         }
 
         // GET api/{version}/account/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(Guid id)
         {
-            return "value";
+            using (var context = new ApplicationDbContext()) {
+                var user = context.Users.Single(u => u.Id == id);
+
+                return new JsonResult(user);
+            }
         }
 
         // POST api/{version}/account
@@ -41,9 +46,17 @@ namespace _2ndSemesterProject.Controllers.Api.v1
 
         // DELETE api/{version}/account/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
+            using (var context = new ApplicationDbContext())
+            {
+                var user = context.Users.Single(u => u.Id == id);
 
+                if (user == null)
+                    context.Users.Remove(user);
+
+                context.SaveChanges();
+            }
         }
     }
 }

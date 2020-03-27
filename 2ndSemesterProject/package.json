@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "@types/jquery": "3.3.33"
+  },
+  "devDependencies": {
+
+  },
+  "name": "2nd-semester-project",
+  "private": true,
+  "version": "1.0.0",
+  "author": {
+    "name": "Laurent Keusch & Ethan Marchand",
+    "email": "laurentkeusch@gmail.com"
+  }
+}

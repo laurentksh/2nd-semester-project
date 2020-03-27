@@ -32,10 +32,9 @@ namespace _2ndSemesterProject
         public void ConfigureServices(IServiceCollection services)
         {
             // Load the DB connection string.
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContextPool<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-
+                    Configuration.GetConnectionString("DefaultConnection")), 128);
 
             // Anti-Forgery
             var options = new AntiforgeryOptions
@@ -71,7 +70,8 @@ namespace _2ndSemesterProject
 
             services.AddIdentity<AppUser, AppRole>(o4 => o4 = identityOpt)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders().AddDefaultUI();
+                .AddDefaultTokenProviders()
+                .AddDefaultUI();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -80,6 +80,16 @@ namespace _2ndSemesterProject
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            using (IServiceScope scope = app.ApplicationServices.CreateScope())
+            {
+                //Get services here
+
+                using (ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
+                {
+                    dbContext.Database.EnsureCreated();
+                }
+            }
+
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();

@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace _2ndSemesterProject.Models
 {
     public class AccountPlan
     {
         /// <summary>Account Plan Id</summary>
+        [Key]
         public Guid Id { get; set; }
         
         /// <summary>Account Plan name (Free, Premium, etc)</summary>
@@ -34,5 +38,11 @@ namespace _2ndSemesterProject.Models
             Available = 1,
             Unavailable = 2
         }
+
+
+        // Inverse properties
+
+        [InverseProperty(nameof(AppUser.AccountPlan))]
+        public List<AppUser> Users { get; set; }
     }
 }

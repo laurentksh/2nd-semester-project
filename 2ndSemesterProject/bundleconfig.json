@@ -1,0 +1,49 @@
+[
+  {
+    "outputFileName": "wwwroot/css/base.css",
+    "inputFiles": [
+      "wwwroot/css/base.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/site.css",
+    "inputFiles": [
+      "wwwroot/css/site.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/css/contact.css",
+    "inputFiles": [
+      "wwwroot/css/contact.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/site.js",
+    "inputFiles": [
+      "wwwroot/js/site.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/ts/FileManager.js",
+    "inputFiles": [
+      "wwwroot/ts/FileManager.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  }
+
+  //Perhaps make a single file for all libraries.
+]

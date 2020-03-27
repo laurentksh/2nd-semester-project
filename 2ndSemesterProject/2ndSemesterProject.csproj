@@ -10,24 +10,38 @@
   <ItemGroup>
     <Compile Remove="Images\**" />
     <Compile Remove="NewFolder\**" />
-    <Compile Remove="wwwroot\NewFolder\**" />
     <Content Remove="Images\**" />
     <Content Remove="NewFolder\**" />
-    <Content Remove="wwwroot\NewFolder\**" />
     <EmbeddedResource Remove="Images\**" />
     <EmbeddedResource Remove="NewFolder\**" />
-    <EmbeddedResource Remove="wwwroot\NewFolder\**" />
     <None Remove="Images\**" />
     <None Remove="NewFolder\**" />
-    <None Remove="wwwroot\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.cs" />
+    <Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.Designer.cs" />
     <Compile Remove="Data\Migrations\20200313222839_InitialCreate.cs" />
     <Compile Remove="Data\Migrations\20200313222839_InitialCreate.Designer.cs" />
     <Compile Remove="Data\Migrations\20200313223312_InitialCreate.cs" />
     <Compile Remove="Data\Migrations\20200313223312_InitialCreate.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200323002539_Initial.cs" />
+    <Compile Remove="Data\Migrations\20200323002539_Initial.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200323011816_Initial.cs" />
+    <Compile Remove="Data\Migrations\20200323011816_Initial.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200323012014_Initial.cs" />
+    <Compile Remove="Data\Migrations\20200323012014_Initial.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200323012348_Initial.cs" />
+    <Compile Remove="Data\Migrations\20200323012348_Initial.Designer.cs" />
     <Compile Remove="HomeController2.cs" />
+    <Compile Remove="Migrations\20200323012826_Initial.cs" />
+    <Compile Remove="Migrations\20200323012826_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200323014547_Initial.cs" />
+    <Compile Remove="Migrations\20200323014547_Initial.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\ts\FileManager.ts" />
   </ItemGroup>
 
 
@@ -39,6 +53,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.8.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -68,10 +86,20 @@
   </ItemGroup>
 
 
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\ts\FileManager.ts" />
+  </ItemGroup>
+
+
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptTarget>ES2019</TypeScriptTarget>
     <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
-    <TypeScriptModuleKind />
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
