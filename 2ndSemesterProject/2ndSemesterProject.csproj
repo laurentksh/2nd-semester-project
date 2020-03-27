@@ -10,16 +10,12 @@
   <ItemGroup>
     <Compile Remove="Images\**" />
     <Compile Remove="NewFolder\**" />
-    <Compile Remove="wwwroot\NewFolder\**" />
     <Content Remove="Images\**" />
     <Content Remove="NewFolder\**" />
-    <Content Remove="wwwroot\NewFolder\**" />
     <EmbeddedResource Remove="Images\**" />
     <EmbeddedResource Remove="NewFolder\**" />
-    <EmbeddedResource Remove="wwwroot\NewFolder\**" />
     <None Remove="Images\**" />
     <None Remove="NewFolder\**" />
-    <None Remove="wwwroot\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +40,10 @@
     <Compile Remove="Migrations\20200323014547_Initial.Designer.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\ts\FileManager.ts" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.2" />
@@ -53,6 +53,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.8.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -87,10 +91,15 @@
   </ItemGroup>
 
 
+  <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\ts\FileManager.ts" />
+  </ItemGroup>
+
+
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptTarget>ES2019</TypeScriptTarget>
     <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
-    <TypeScriptModuleKind />
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptRemoveComments>True</TypeScriptRemoveComments>

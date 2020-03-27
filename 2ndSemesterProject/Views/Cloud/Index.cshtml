@@ -1,34 +1,41 @@
 ﻿@{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "My Cloud";
 }
 
 @section Head {
     <link rel="stylesheet" asp-append-version="true" href="~/css/FileManager.css" />
-    <link rel="stylesheet" asp-append-version="true" href="~/js/FileManager.js" />
+}
+
+@section Scripts {
+    <script asp-append-version="true" type="text/javascript" src="~/ts/FileManager.js"></script>
 }
 
 <div class="container">
     <div class="row">
-        <div class="fm-sidebar col-sm-1">
-            <div class="fm-sidebar-headers">
+        <div class="fm-sb col-sm-1">
+            <div class="fm-sb-headers">
 
             </div>
-            <div id="fm-folders" class="fm-sidebar-folders">
-                <!-- Example folder named "New Folder 1" -->
-                <div id="folder-1" data-folder-id="BF641DBF-7B8F-40FA-B8EE-480579E93B00">
-                    <p>New folder 1</p>
-                </div>
+            <div id="fm-sb-folders" class="fm-sb-folders">
+                <!-- Sidebar Folders (Quick access) -->
+                <template id="fm-sb-folder-template">
+                    <div class="card" id="folder-1" data-folder-id="%id%">
+                        <p>%folder-name%</p>
+                    </div>
+                </template>
+
+                <button id="debug">Debug</button>
             </div>
         </div>
 
         <div class="fm-content col-xl">
-            <div class="container" id="file-container">
+            <div class="container">
                 <!-- File Container -->
-                <div class="row" id="file-container-row">
-                    <div class="col" id="file-container-col">
-                        <!-- Files -->
+                <div class="row" id="file-container">
+                    <!-- Files -->
 
-                        <div class="fm-file">
+                    <template id="file-template">
+                        <div class="col fm-file" data-file-id="%id%">
                             <div class="card">
                                 <img id="file-%id%-imgpreview" src="%FILE_PREVIEW_URL%" class="card-img-top" alt="%FILE_NAME% - Preview" />
 
@@ -38,12 +45,13 @@
                                 </div>
 
                                 <div class="card-body">
-                                    <a id="file-%id%-download" href="%FILE_DOWNLOAD_LINK%" class="btn btn-primary card-link"><i class="fas fa-file-download"></i></a>
-                                    <a id="file-%id%-more" class="btn btn-outline-secondary card-link"><i class="fas fa-ellipsis-h"></i></a>
+                                    <a id="file-%id%-download" class="btn btn-primary card-link fm-btn-download"><i class="fas fa-file-download"></i></a>
+                                    <a id="file-%id%-more" class="btn btn-outline-secondary card-link fm-btn-more"><i class="fas fa-ellipsis-h"></i></a>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </template>
+
                 </div>
             </div>
         </div>

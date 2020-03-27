@@ -36,9 +36,9 @@
     }
   },
   {
-    "outputFileName": "wwwroot/js/FileManager.js",
+    "outputFileName": "wwwroot/ts/FileManager.js",
     "inputFiles": [
-      "wwwroot/js/FileManager.css"
+      "wwwroot/ts/FileManager.js"
     ],
     "minify": {
       "enabled": true

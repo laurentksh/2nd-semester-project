@@ -1,12 +1,12 @@
-﻿.fm-sidebar {
+﻿.fm-sb {
 
 }
 
-.fm-sidebar-headers {
+.fm-sb-headers {
 
 }
 
-.fm-sidebar-folders {
+.fm-sb-folders {
 
 }
 
@@ -16,4 +16,12 @@
 
 .fm-file > div {
     width: 18rem;
+}
+
+.fm-btn-download {
+
+}
+
+.fm-btn-more {
+    float: right;
 }
