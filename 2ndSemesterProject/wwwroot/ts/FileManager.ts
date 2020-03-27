@@ -10,7 +10,8 @@ $(document).ready(function () {
         file.ElementId = "3B07DD9A-DC09-48E2-B304-E328B9F2AD88";
         file.FileName = "test-file.png";
         file.FileInfo = "PNG Image - 5KB";
-        file.PreviewUrl = "/api/v1/cloud/preview/" + file.ElementId;
+        //file.PreviewUrl = "/api/v1/cloud/preview/" + file.ElementId;
+        file.PreviewUrl = "/images/no_preview.png";
 
         addFileUIElementToMain(file, true);
     });
