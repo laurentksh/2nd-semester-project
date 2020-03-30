@@ -42,6 +42,7 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\ts\FileManager.ts" />
+    <Content Remove="wwwroot\ts\Main.ts" />
   </ItemGroup>
 
 
@@ -88,6 +89,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
+    <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
 

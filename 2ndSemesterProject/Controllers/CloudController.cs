@@ -23,7 +23,7 @@ namespace _2ndSemesterProject.Controllers
 
         // GET: My-Cloud/Details/5
         [HttpGet("Details/{id}")]
-        public ActionResult Details(int id)
+        public ActionResult Details(Guid id)
         {
             return View();
         }
@@ -37,14 +37,14 @@ namespace _2ndSemesterProject.Controllers
 
         // GET: My-Cloud/Edit/5
         [HttpGet("Edit/{id}")]
-        public ActionResult Edit(int id)
+        public ActionResult Edit(Guid id)
         {
             return View();
         }
 
         // GET: My-Cloud/Delete/5
         [HttpGet("Delete/{id}")]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(Guid id)
         {
             return View();
         }
@@ -70,12 +70,12 @@ namespace _2ndSemesterProject.Controllers
         // POST: My-Cloud/Edit/5
         [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Guid id, IFormCollection collection)
         {
             try
             {
                 // TODO: Add update logic here
-
+                
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -87,7 +87,7 @@ namespace _2ndSemesterProject.Controllers
         // POST: My-Cloud/Delete/5
         [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(Guid id, IFormCollection collection)
         {
             try
             {

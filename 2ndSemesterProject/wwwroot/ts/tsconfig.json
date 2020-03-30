@@ -8,6 +8,7 @@
     "module": "ES6"
   },
   "files": [
+    "Main.ts",
     "FileManager.ts"
   ],
   "exclude": [
