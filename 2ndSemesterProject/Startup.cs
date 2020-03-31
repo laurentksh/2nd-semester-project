@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using _2ndSemesterProject.Models;
+using _2ndSemesterProject.Models.Database;
 
 namespace _2ndSemesterProject
 {
