@@ -460,3 +460,36 @@ iframe {
     opacity: 1;
   }
 }
+
+.footer {
+    position: inherit;
+}
+
+.main-container,
+.main-container .pb-3{
+    padding: 0px !important;
+}
+.wrap-login100 {
+    background: rgba(237, 237, 237, 0);
+    padding: 3%;
+}
+.container-login100 {
+    background: none;
+    min-height: unset;
+}
+body {
+    height: auto;
+    margin-bottom: 0px;
+}
+.p-t-136 {
+    padding-top: 41.5%;
+}
+.input100{
+    background: #fff;
+}
+.login100-form-btn {
+    background-color: #0aa4d2;
+}
+a.txt2:hover {
+    color: #0aa4d2;
+}
