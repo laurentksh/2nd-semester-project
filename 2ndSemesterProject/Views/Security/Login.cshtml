@@ -22,7 +22,7 @@
                 <img src="../../images/login/img-01.png" alt="IMG">
             </div>
 
-            <form class="login100-form validate-form">
+            <form method="post" class="login100-form validate-form">
                 <span class="login100-form-title">
                     Member Login
                 </span>
@@ -58,11 +58,8 @@
                     </a>
                 </div>
 
-                <div class="text-center p-t-136">
-                    <a class="txt2" href="#">
-                        Create your Account
-                        <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-                    </a>
+                <div class="text-center p-t-136 margebottom">
+                    <a class="txt2" asp-controller="Security" asp-action="Register">Create your account<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i></a>
                 </div>
             </form>
         </div>
