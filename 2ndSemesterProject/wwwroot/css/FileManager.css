@@ -10,6 +10,10 @@
 
 }
 
+.fm-sb-folders-current {
+
+}
+
 .fm-content {
 
 }
@@ -20,6 +24,10 @@
 
 .fm-file > div {
     width: 18rem;
+}
+
+.fm-file img {
+    height: 200px;
 }
 
 .fm-btn-download {

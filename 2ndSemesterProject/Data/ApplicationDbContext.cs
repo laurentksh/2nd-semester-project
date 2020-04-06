@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using _2ndSemesterProject.Models;
+using _2ndSemesterProject.Models.Database;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

@@ -637,4 +637,4 @@ MigrationBackup/
 
 
 # Libraries LibMan
-2ndSemesterProject/wwwroot/lib/*
+2ndSemesterProject/wwwroot/lib/**

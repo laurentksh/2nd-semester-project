@@ -13,9 +13,11 @@ namespace _2ndSemesterProject.Controllers.Api.v1
     public class CloudController : ControllerBase
     {
         [HttpGet("preview/{id}")]
-        public string GetPreviewImage(Guid id, bool file)
+        public IActionResult GetPreviewImage(Guid id, bool file)
         {
-            return "/null";
+            //TODO: Get file preview from folder (example path: "/<userId>/<fileId>/preview.jpg")
+
+            return new FileStreamResult(null, "Content-Type: image/jpeg");
         }
     }
 }

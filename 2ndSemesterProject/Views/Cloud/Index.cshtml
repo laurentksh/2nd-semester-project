@@ -7,7 +7,7 @@
 }
 
 @section Scripts {
-    <script asp-append-version="true" type="module" src="~/ts/FileManager.js"></script>
+    <script asp-append-version="true" type="text/javascript" src="~/ts/FileManager.js"></script>
 }
 
 <div class="container">
@@ -19,7 +19,7 @@
             <div id="fm-sb-folders" class="fm-sb-folders">
                 <!-- Sidebar Folders (Quick access) -->
                 <template id="fm-sb-folder-template">
-                    <div class="card" id="folder-1" data-folder-id="%id%">
+                    <div class="card" data-folder-id="%id%">
                         <p>%folder-name%</p>
                     </div>
                 </template>

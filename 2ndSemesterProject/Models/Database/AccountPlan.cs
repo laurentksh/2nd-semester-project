@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace _2ndSemesterProject.Models
+namespace _2ndSemesterProject.Models.Database
 {
     public class AccountPlan
     {
