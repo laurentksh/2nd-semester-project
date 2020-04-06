@@ -21,11 +21,23 @@ namespace _2ndSemesterProject.Controllers
             return View();
         }
 
-        // GET: My-Cloud/Details/5
-        [HttpGet("Details/{id}")]
-        public ActionResult Details(Guid id)
+        // GET: My-Cloud/File/5
+        [HttpGet("File/{*path}")]
+        public ActionResult File(string path)
         {
-            return View();
+            string[] folders = path.Split("/");
+
+            return Json(folders);
+            //return View();
+        }
+
+        [HttpGet("Folder/{*path}/")]
+        public ActionResult Folder(string path)
+        {
+            string[] folders = path.Split("/");
+
+            return Json(folders);
+            //return View();
         }
 
         // GET: My-Cloud/Create
