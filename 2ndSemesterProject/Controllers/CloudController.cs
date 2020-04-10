@@ -21,84 +21,21 @@ namespace _2ndSemesterProject.Controllers
             return View();
         }
 
-        // GET: My-Cloud/Details/5
-        [HttpGet("Details/{id}")]
-        public ActionResult Details(int id)
+        // GET: My-Cloud/File/5
+        [HttpGet("File/{id}")]
+        public ActionResult File(Guid id)
         {
-            return View();
+
+            return Json(null);
+            //return View();
         }
 
-        // GET: My-Cloud/Create
-        [HttpGet("Create")]
-        public ActionResult Create()
+        [HttpGet("Folder/{id}")]
+        public ActionResult Folder(Guid id)
         {
-            return View();
-        }
 
-        // GET: My-Cloud/Edit/5
-        [HttpGet("Edit/{id}")]
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // GET: My-Cloud/Delete/5
-        [HttpGet("Delete/{id}")]
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-
-        // POST: My-Cloud/Create
-        [HttpPost("Create")]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // POST: My-Cloud/Edit/5
-        [HttpPost("Edit/{id}")]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // POST: My-Cloud/Delete/5
-        [HttpPost("Delete/{id}")]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return Json(null);
+            //return View();
         }
     }
 }

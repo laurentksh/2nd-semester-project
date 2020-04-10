@@ -1,8 +1,4 @@
-﻿@{
-    var date = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -52,15 +48,14 @@
     </div>
     <footer class="border-top footer border-top">
         <div class="container">
-            &copy; 2020 - _2ndSemesterProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> - 
-            <span>@date</span>
+            &copy; 2020 - _2ndSemesterProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             <button class="news-btn" type="submit">Subscribe</button>
             <input class="news-mail" type="text" placeholder="Email address" name="Email" required>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/ts/Main.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

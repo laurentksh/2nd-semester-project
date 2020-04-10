@@ -10,14 +10,14 @@ using _2ndSemesterProject.Data;
 namespace _2ndSemesterProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200323014936_Initial")]
+    [Migration("20200410212643_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.2")
+                .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -122,7 +122,7 @@ namespace _2ndSemesterProject.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("_2ndSemesterProject.Models.AccountPlan", b =>
+            modelBuilder.Entity("_2ndSemesterProject.Models.Database.AccountPlan", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -151,7 +151,7 @@ namespace _2ndSemesterProject.Migrations
                     b.ToTable("AccountPlans");
                 });
 
-            modelBuilder.Entity("_2ndSemesterProject.Models.AppRole", b =>
+            modelBuilder.Entity("_2ndSemesterProject.Models.Database.AppRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -179,7 +179,7 @@ namespace _2ndSemesterProject.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("_2ndSemesterProject.Models.AppUser", b =>
+            modelBuilder.Entity("_2ndSemesterProject.Models.Database.AppUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -264,7 +264,7 @@ namespace _2ndSemesterProject.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("_2ndSemesterProject.Models.File", b =>
+            modelBuilder.Entity("_2ndSemesterProject.Models.Database.CloudFile", b =>
                 {
                     b.Property<Guid>("FileId")
                         .ValueGeneratedOnAdd()
@@ -276,26 +276,41 @@ namespace _2ndSemesterProject.Migrations
                     b.Property<string>("FileDescription")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FileExtension")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileNameWithoutExt")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("FileSize")
                         .HasColumnType("bigint");
 
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("LastEditDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("FileId");
 
+                    b.HasIndex("OwnerId");
+
                     b.HasIndex("ParentId");
 
                     b.ToTable("Files");
                 });
 
-            modelBuilder.Entity("_2ndSemesterProject.Models.Folder", b =>
+            modelBuilder.Entity("_2ndSemesterProject.Models.Database.CloudFolder", b =>
                 {
                     b.Property<Guid>("FolderId")
                         .ValueGeneratedOnAdd()
@@ -305,19 +320,57 @@ namespace _2ndSemesterProject.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FolderName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("FolderId");
 
+                    b.HasIndex("OwnerId");
+
                     b.HasIndex("ParentId");
 
                     b.ToTable("Folders");
                 });
 
-            modelBuilder.Entity("_2ndSemesterProject.Models.FolderSharedAccess", b =>
+            modelBuilder.Entity("_2ndSemesterProject.Models.Database.FileSharedAccess", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ReceiverId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SharedFileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("SharedFileId");
+
+                    b.ToTable("FileSharedAccesses");
+                });
+
+            modelBuilder.Entity("_2ndSemesterProject.Models.Database.FolderSharedAccess", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -348,7 +401,7 @@ namespace _2ndSemesterProject.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("_2ndSemesterProject.Models.AppRole", null)
+                    b.HasOne("_2ndSemesterProject.Models.Database.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -357,7 +410,7 @@ namespace _2ndSemesterProject.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("_2ndSemesterProject.Models.AppUser", null)
+                    b.HasOne("_2ndSemesterProject.Models.Database.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -366,7 +419,7 @@ namespace _2ndSemesterProject.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("_2ndSemesterProject.Models.AppUser", null)
+                    b.HasOne("_2ndSemesterProject.Models.Database.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -375,13 +428,13 @@ namespace _2ndSemesterProject.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("_2ndSemesterProject.Models.AppRole", null)
+                    b.HasOne("_2ndSemesterProject.Models.Database.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("_2ndSemesterProject.Models.AppUser", null)
+                    b.HasOne("_2ndSemesterProject.Models.Database.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -390,55 +443,88 @@ namespace _2ndSemesterProject.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("_2ndSemesterProject.Models.AppUser", null)
+                    b.HasOne("_2ndSemesterProject.Models.Database.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("_2ndSemesterProject.Models.AppUser", b =>
+            modelBuilder.Entity("_2ndSemesterProject.Models.Database.AppUser", b =>
                 {
-                    b.HasOne("_2ndSemesterProject.Models.AccountPlan", "AccountPlan")
+                    b.HasOne("_2ndSemesterProject.Models.Database.AccountPlan", "AccountPlan")
                         .WithMany("Users")
                         .HasForeignKey("AccountPlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("_2ndSemesterProject.Models.File", b =>
+            modelBuilder.Entity("_2ndSemesterProject.Models.Database.CloudFile", b =>
                 {
-                    b.HasOne("_2ndSemesterProject.Models.Folder", "Parent")
+                    b.HasOne("_2ndSemesterProject.Models.Database.AppUser", "Owner")
+                        .WithMany("Files")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("_2ndSemesterProject.Models.Database.CloudFolder", "Parent")
                         .WithMany("Files")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("_2ndSemesterProject.Models.Folder", b =>
+            modelBuilder.Entity("_2ndSemesterProject.Models.Database.CloudFolder", b =>
                 {
-                    b.HasOne("_2ndSemesterProject.Models.Folder", "Parent")
+                    b.HasOne("_2ndSemesterProject.Models.Database.AppUser", "Owner")
+                        .WithMany("Folders")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("_2ndSemesterProject.Models.Database.CloudFolder", "Parent")
                         .WithMany("Childs")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("_2ndSemesterProject.Models.FolderSharedAccess", b =>
+            modelBuilder.Entity("_2ndSemesterProject.Models.Database.FileSharedAccess", b =>
                 {
-                    b.HasOne("_2ndSemesterProject.Models.AppUser", "Receiver")
+                    b.HasOne("_2ndSemesterProject.Models.Database.AppUser", "Receiver")
+                        .WithMany("FileSharedAccessesReceiver")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("_2ndSemesterProject.Models.Database.AppUser", "Sender")
+                        .WithMany("FileSharedAccessesSenders")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("_2ndSemesterProject.Models.Database.CloudFile", "SharedFile")
+                        .WithMany()
+                        .HasForeignKey("SharedFileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("_2ndSemesterProject.Models.Database.FolderSharedAccess", b =>
+                {
+                    b.HasOne("_2ndSemesterProject.Models.Database.AppUser", "Receiver")
                         .WithMany("FolderSharedAccessesReceiver")
                         .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("_2ndSemesterProject.Models.AppUser", "Sender")
+                    b.HasOne("_2ndSemesterProject.Models.Database.AppUser", "Sender")
                         .WithMany("FolderSharedAccessesSenders")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("_2ndSemesterProject.Models.Folder", "SharedFolder")
+                    b.HasOne("_2ndSemesterProject.Models.Database.CloudFolder", "SharedFolder")
                         .WithMany()
                         .HasForeignKey("SharedFolderId")
                         .OnDelete(DeleteBehavior.Cascade)

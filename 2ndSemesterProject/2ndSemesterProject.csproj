@@ -8,14 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Images\**" />
-    <Compile Remove="NewFolder\**" />
-    <Content Remove="Images\**" />
-    <Content Remove="NewFolder\**" />
-    <EmbeddedResource Remove="Images\**" />
-    <EmbeddedResource Remove="NewFolder\**" />
-    <None Remove="Images\**" />
-    <None Remove="NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,26 +25,30 @@
     <Compile Remove="Data\Migrations\20200323012014_Initial.Designer.cs" />
     <Compile Remove="Data\Migrations\20200323012348_Initial.cs" />
     <Compile Remove="Data\Migrations\20200323012348_Initial.Designer.cs" />
-    <Compile Remove="HomeController2.cs" />
     <Compile Remove="Migrations\20200323012826_Initial.cs" />
     <Compile Remove="Migrations\20200323012826_Initial.Designer.cs" />
     <Compile Remove="Migrations\20200323014547_Initial.cs" />
     <Compile Remove="Migrations\20200323014547_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200407011606_FixedCloudFS2.cs" />
+    <Compile Remove="Migrations\20200407011606_FixedCloudFS2.Designer.cs" />
+    <Compile Remove="Migrations\20200407012122_FixedCloudFS2.cs" />
+    <Compile Remove="Migrations\20200407012122_FixedCloudFS2.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Remove="wwwroot\ts\FileManager.ts" />
+    <Content Remove="wwwroot\ts\Main.ts" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -88,6 +84,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
+    <Folder Include="wwwroot\fonts\" />
   </ItemGroup>
 
 
