@@ -8,14 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Images\**" />
-    <Compile Remove="NewFolder\**" />
-    <Content Remove="Images\**" />
-    <Content Remove="NewFolder\**" />
-    <EmbeddedResource Remove="Images\**" />
-    <EmbeddedResource Remove="NewFolder\**" />
-    <None Remove="Images\**" />
-    <None Remove="NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,11 +25,14 @@
     <Compile Remove="Data\Migrations\20200323012014_Initial.Designer.cs" />
     <Compile Remove="Data\Migrations\20200323012348_Initial.cs" />
     <Compile Remove="Data\Migrations\20200323012348_Initial.Designer.cs" />
-    <Compile Remove="HomeController2.cs" />
     <Compile Remove="Migrations\20200323012826_Initial.cs" />
     <Compile Remove="Migrations\20200323012826_Initial.Designer.cs" />
     <Compile Remove="Migrations\20200323014547_Initial.cs" />
     <Compile Remove="Migrations\20200323014547_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200407011606_FixedCloudFS2.cs" />
+    <Compile Remove="Migrations\20200407011606_FixedCloudFS2.Designer.cs" />
+    <Compile Remove="Migrations\20200407012122_FixedCloudFS2.cs" />
+    <Compile Remove="Migrations\20200407012122_FixedCloudFS2.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,7 +9,7 @@ namespace _2ndSemesterProject.Controllers.Api.v1
 {
     [ApiVersion("1.0")]
     [ApiController]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{version:apiVersion}/account")]
     public class AccountController : ControllerBase
     {
         // GET: api/{version}/account

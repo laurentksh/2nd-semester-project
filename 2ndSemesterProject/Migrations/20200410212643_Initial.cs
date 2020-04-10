@@ -39,25 +39,6 @@ namespace _2ndSemesterProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Folders",
-                columns: table => new
-                {
-                    FolderId = table.Column<Guid>(nullable: false),
-                    FolderName = table.Column<string>(nullable: true),
-                    CreationDate = table.Column<DateTime>(nullable: false),
-                    ParentId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Folders", x => x.FolderId);
-                    table.ForeignKey(
-                        name: "FK_Folders_Folders_ParentId",
-                        column: x => x.ParentId,
-                        principalTable: "Folders",
-                        principalColumn: "FolderId");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -111,29 +92,6 @@ namespace _2ndSemesterProject.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Files",
-                columns: table => new
-                {
-                    FileId = table.Column<Guid>(nullable: false),
-                    FileName = table.Column<string>(nullable: true),
-                    FileDescription = table.Column<string>(nullable: true),
-                    CreationDate = table.Column<DateTime>(nullable: false),
-                    LastEditDate = table.Column<DateTime>(nullable: false),
-                    FileSize = table.Column<long>(nullable: false),
-                    ParentId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Files", x => x.FileId);
-                    table.ForeignKey(
-                        name: "FK_Files_Folders_ParentId",
-                        column: x => x.ParentId,
-                        principalTable: "Folders",
-                        principalColumn: "FolderId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -223,6 +181,65 @@ namespace _2ndSemesterProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Folders",
+                columns: table => new
+                {
+                    FolderId = table.Column<Guid>(nullable: false),
+                    FolderName = table.Column<string>(nullable: false),
+                    IsPublic = table.Column<bool>(nullable: false),
+                    CreationDate = table.Column<DateTime>(nullable: false),
+                    ParentId = table.Column<Guid>(nullable: false),
+                    OwnerId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Folders", x => x.FolderId);
+                    table.ForeignKey(
+                        name: "FK_Folders_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Folders_Folders_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Folders",
+                        principalColumn: "FolderId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Files",
+                columns: table => new
+                {
+                    FileId = table.Column<Guid>(nullable: false),
+                    FileName = table.Column<string>(nullable: false),
+                    FileNameWithoutExt = table.Column<string>(nullable: true),
+                    FileExtension = table.Column<string>(nullable: true),
+                    FileDescription = table.Column<string>(nullable: true),
+                    IsPublic = table.Column<bool>(nullable: false),
+                    CreationDate = table.Column<DateTime>(nullable: false),
+                    LastEditDate = table.Column<DateTime>(nullable: false),
+                    FileSize = table.Column<long>(nullable: false),
+                    ParentId = table.Column<Guid>(nullable: false),
+                    OwnerId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Files", x => x.FileId);
+                    table.ForeignKey(
+                        name: "FK_Files_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Files_Folders_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Folders",
+                        principalColumn: "FolderId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FolderSharedAccesses",
                 columns: table => new
                 {
@@ -250,6 +267,37 @@ namespace _2ndSemesterProject.Migrations
                         column: x => x.SharedFolderId,
                         principalTable: "Folders",
                         principalColumn: "FolderId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FileSharedAccesses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ExpirationDate = table.Column<DateTime>(nullable: false),
+                    SenderId = table.Column<Guid>(nullable: false),
+                    ReceiverId = table.Column<Guid>(nullable: false),
+                    SharedFileId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FileSharedAccesses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FileSharedAccesses_AspNetUsers_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_FileSharedAccesses_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_FileSharedAccesses_Files_SharedFileId",
+                        column: x => x.SharedFileId,
+                        principalTable: "Files",
+                        principalColumn: "FileId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -298,9 +346,34 @@ namespace _2ndSemesterProject.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Files_OwnerId",
+                table: "Files",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Files_ParentId",
                 table: "Files",
                 column: "ParentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileSharedAccesses_ReceiverId",
+                table: "FileSharedAccesses",
+                column: "ReceiverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileSharedAccesses_SenderId",
+                table: "FileSharedAccesses",
+                column: "SenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileSharedAccesses_SharedFileId",
+                table: "FileSharedAccesses",
+                column: "SharedFileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Folders_OwnerId",
+                table: "Folders",
+                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Folders_ParentId",
@@ -341,7 +414,7 @@ namespace _2ndSemesterProject.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Files");
+                name: "FileSharedAccesses");
 
             migrationBuilder.DropTable(
                 name: "FolderSharedAccesses");
@@ -350,10 +423,13 @@ namespace _2ndSemesterProject.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Files");
 
             migrationBuilder.DropTable(
                 name: "Folders");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "AccountPlans");

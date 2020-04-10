@@ -1,5 +1,14 @@
 //TODO: Add a card-footer to show status (File downloaded, etc)
 //TODO: To fix AzPipelines, try adding an import statement here for @types/jquery
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 // Consts
 const ImgPreviewUrl = "/images/no_preview.png";
 const ImgLoadingPreviewUrl = "/images/loading.svg";
@@ -26,41 +35,58 @@ function DisplayImage(url, element, showIcons = true) {
     console.log("Loading " + img.src);
     img.src = url;
 }
+var ApiUrls;
+(function (ApiUrls) {
+    ApiUrls["ChildFiles"] = "file/{0}/childs/";
+    ApiUrls["ChildFolders"] = "folder/{0}/childs/";
+    ApiUrls["DownloadFile"] = "file/{0}/download/";
+    ApiUrls["DownloadFolder"] = "folder/{0}/download/";
+    ApiUrls["FilePreview"] = "file/{0}/preview/";
+})(ApiUrls || (ApiUrls = {}));
 class ApiInterface {
-    GetChildFolders(inFolder, recursive) {
-        //TODO
-        $.getJSON(ApiInterface.ApiEndpoint, null, () => {
+    //Solution: Use a callback
+    GetChildFolders(parent) {
+        return __awaiter(this, void 0, void 0, function* () {
+            //TODO
+            const apiPromise = new Promise((resolve, reject) => $.getJSON(ApiInterface.ApiEndpoint + ApiUrls.ChildFolders.replace("{0}", parent.ElementId), resolve, reject));
+            yield apiPromise.then();
+            return null;
         });
-        return null;
     }
     GetChildFiles(folder) {
-        return null;
+        return __awaiter(this, void 0, void 0, function* () {
+            return null;
+        });
     }
 }
 ApiInterface.ApiVersion = "v1";
-ApiInterface.ApiEndpoint = "/api/" + ApiInterface.ApiVersion + "/";
+ApiInterface.ApiEndpoint = "api/" + ApiInterface.ApiVersion + "/";
 class FileManager {
     constructor() {
         this.Api = new ApiInterface();
     }
     LoadFolder(folder) {
-        this.ClearMain(); //Clear all curent folders and files
-        //Load folders first
-        for (const folder_ of this.Api.GetChildFolders(folder)) {
-            this.AddFolderToMain(folder_, true);
-        }
-        //Load files
-        for (const file_ of this.Api.GetChildFiles(folder)) {
-            this.AddFileToMain(file_, true);
-        }
-        //Displays in which folder the user is currently in
-        $("#fm-sb-folders").find("div[data-folder-id'" + folder.ElementId + "'")
-            .addClass("fm-sb-folders-current");
+        return __awaiter(this, void 0, void 0, function* () {
+            this.ClearMain(); //Clear all curent folders and files
+            //Load folders first
+            for (const folder_ of yield this.Api.GetChildFolders(folder)) {
+                this.AddFolderToMain(folder_, true);
+            }
+            //Load files
+            for (const file_ of yield this.Api.GetChildFiles(folder)) {
+                this.AddFileToMain(file_, true);
+            }
+            //Displays in which folder the user is currently in
+            $("#fm-sb-folders").find("div[data-folder-id'" + folder.ElementId + "'")
+                .addClass("fm-sb-folders-current");
+        });
     }
     LoadSideBar() {
-        for (let folder of this.Api.GetChildFolders(null, true)) {
-            this.AddFolderToSidebar(folder, true);
-        }
+        return __awaiter(this, void 0, void 0, function* () {
+            for (const folder of yield this.Api.GetChildFolders(null)) {
+                this.AddFolderToSidebar(folder, true); //Add another LoadSidebar call on Click event
+            }
+        });
     }
     AddFileToMain(element, append) {
         const template = $("#file-template").html();
@@ -104,6 +130,9 @@ class FileManager {
     ClearMain() {
         $("#file-container").empty();
     }
+    ClearSideBar() {
+        $("#fm-sb-folders").empty();
+    }
 }
 class CloudFile {
 }
@@ -112,6 +141,8 @@ class CloudFolder {
 //Main
 const fm = new FileManager();
 PreloadImage(ImgPreviewUrl);
+PreloadImage(ImgFailedLoadingUrl);
+PreloadImage(ImgLoadingPreviewUrl);
 let i = 0;
 $(document).ready(function () {
     $("#debug").click(() => {

@@ -10,24 +10,30 @@ namespace _2ndSemesterProject.Data
 {
     public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, Guid>
     {
-        public DbSet<AccountPlan> AccountPlans { get; set; }
-
-        public DbSet<File> Files { get; set; }
-        public DbSet<Folder> Folders { get; set; }
+        public DbSet<CloudFile> Files { get; set; }
+        public DbSet<CloudFolder> Folders { get; set; }
         public DbSet<FolderSharedAccess> FolderSharedAccesses { get; set; }
+        public DbSet<FileSharedAccess> FileSharedAccesses { get; set; }
+
+        public DbSet<AccountPlan> AccountPlans { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options = default) : base(options)
         {
-            
+
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Folder>()
+            builder.Entity<CloudFolder>()
                 .HasOne(p => p.Parent)
                 .WithMany(pp => pp.Childs)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<CloudFolder>()
+                .HasOne(o => o.Owner)
+                .WithMany(f => f.Folders)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<FolderSharedAccess>()
@@ -38,6 +44,16 @@ namespace _2ndSemesterProject.Data
             builder.Entity<FolderSharedAccess>()
                 .HasOne(r => r.Receiver)
                 .WithMany(r => r.FolderSharedAccessesReceiver)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<FileSharedAccess>()
+                .HasOne(s => s.Sender)
+                .WithMany(s => s.FileSharedAccessesSenders)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<FileSharedAccess>()
+                .HasOne(r => r.Receiver)
+                .WithMany(r => r.FileSharedAccessesReceiver)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

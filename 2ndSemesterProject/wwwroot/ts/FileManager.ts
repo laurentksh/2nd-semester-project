@@ -8,6 +8,7 @@ const ImgPreviewUrl = "/images/no_preview.png";
 const ImgLoadingPreviewUrl = "/images/loading.svg";
 const ImgFailedLoadingUrl = "/images/failed_loading.png";
 
+
 //Class definitions
 
 function PreloadImage(url: string) {
@@ -39,19 +40,30 @@ function DisplayImage(url: string, element: JQuery<HTMLImageElement>, showIcons 
     img.src = url;
 }
 
+enum ApiUrls {
+    ChildFiles = "file/{0}/childs/",
+    ChildFolders = "folder/{0}/childs/",
+    DownloadFile = "file/{0}/download/",
+    DownloadFolder = "folder/{0}/download/",
+    FilePreview = "file/{0}/preview/"
+}
+
 class ApiInterface {
     public static readonly ApiVersion = "v1";
-    public static readonly ApiEndpoint = "/api/" + ApiInterface.ApiVersion + "/";
+    public static readonly ApiEndpoint = "api/" + ApiInterface.ApiVersion + "/";
 
-    public GetChildFolders(inFolder: CloudFolder | null, recursive?: boolean): Array<CloudFolder> {
+    //Solution: Use a callback
+    public async GetChildFolders(parent: CloudFolder | null): Promise<Array<CloudFolder>> {
         //TODO
-        $.getJSON(ApiInterface.ApiEndpoint, null, () => {
 
-        })
+        const apiPromise = new Promise<any>((resolve, reject) => $.getJSON(ApiInterface.ApiEndpoint + ApiUrls.ChildFolders.replace("{0}", parent.ElementId), resolve, reject));
+
+        await apiPromise.then();
+
         return null;
     }
 
-    public GetChildFiles(folder: CloudFolder | null): Array<CloudFile> {
+    public async GetChildFiles(folder: CloudFolder | null): Promise<Array<CloudFile>> {
 
         return null;
     }
@@ -64,16 +76,18 @@ class FileManager {
         this.Api = new ApiInterface();
     }
 
-    public LoadFolder(folder: CloudFolder) {
+    public async LoadFolder(folder: CloudFolder) {
         this.ClearMain(); //Clear all curent folders and files
 
         //Load folders first
-        for (const folder_ of this.Api.GetChildFolders(folder)) {
+
+
+        for (const folder_ of await this.Api.GetChildFolders(folder)) {
             this.AddFolderToMain(folder_, true);
         }
 
         //Load files
-        for (const file_ of this.Api.GetChildFiles(folder)) {
+        for (const file_ of await this.Api.GetChildFiles(folder)) {
             this.AddFileToMain(file_, true);
         }
 
@@ -82,9 +96,9 @@ class FileManager {
             .addClass("fm-sb-folders-current");
     }
 
-    public LoadSideBar() {
-        for (let folder of this.Api.GetChildFolders(null, true)) {
-            this.AddFolderToSidebar(folder, true);
+    public async LoadSideBar() {
+        for (const folder of await this.Api.GetChildFolders(null)) {
+            this.AddFolderToSidebar(folder, true); //Add another LoadSidebar call on Click event
         }
     }
 
@@ -146,11 +160,15 @@ class FileManager {
     public ClearMain() {
         $("#file-container").empty();
     }
+
+    public ClearSideBar() {
+        $("#fm-sb-folders").empty();
+    }
 }
 
 class CloudFile {
     ElementId: string; //GUID
-    FileName: string;
+    FileName: string; //Without file ext
     FileInfo: string; //E.g: PNG File - 5KB
     DirectUrl: string;
     DownloadUrl: string;
@@ -170,6 +188,9 @@ class CloudFolder {
 const fm = new FileManager();
 
 PreloadImage(ImgPreviewUrl);
+PreloadImage(ImgFailedLoadingUrl);
+PreloadImage(ImgLoadingPreviewUrl);
+
 
 let i = 0;
 
@@ -192,4 +213,3 @@ $(document).ready(function () {
         fm.AddFolderToSidebar(folder, true);
     });
 });
-

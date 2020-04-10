@@ -22,95 +22,20 @@ namespace _2ndSemesterProject.Controllers
         }
 
         // GET: My-Cloud/File/5
-        [HttpGet("File/{*path}")]
-        public ActionResult File(string path)
+        [HttpGet("File/{id}")]
+        public ActionResult File(Guid id)
         {
-            string[] folders = path.Split("/");
 
-            return Json(folders);
+            return Json(null);
             //return View();
         }
 
-        [HttpGet("Folder/{*path}/")]
-        public ActionResult Folder(string path)
+        [HttpGet("Folder/{id}")]
+        public ActionResult Folder(Guid id)
         {
-            string[] folders = path.Split("/");
 
-            return Json(folders);
+            return Json(null);
             //return View();
-        }
-
-        // GET: My-Cloud/Create
-        [HttpGet("Create")]
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // GET: My-Cloud/Edit/5
-        [HttpGet("Edit/{id}")]
-        public ActionResult Edit(Guid id)
-        {
-            return View();
-        }
-
-        // GET: My-Cloud/Delete/5
-        [HttpGet("Delete/{id}")]
-        public ActionResult Delete(Guid id)
-        {
-            return View();
-        }
-
-
-        // POST: My-Cloud/Create
-        [HttpPost("Create")]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // POST: My-Cloud/Edit/5
-        [HttpPost("Edit/{id}")]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(Guid id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-                
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // POST: My-Cloud/Delete/5
-        [HttpPost("Delete/{id}")]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(Guid id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }
