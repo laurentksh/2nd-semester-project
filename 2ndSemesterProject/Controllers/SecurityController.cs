@@ -21,5 +21,11 @@ namespace _2ndSemesterProject.Controllers
             return View();
 
         }
+        [Route("ResetPasswords")]
+        public IActionResult ResetPasswords()
+        {
+            return View();
+
+        }
     }  
 }

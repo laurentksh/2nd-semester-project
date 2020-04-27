@@ -24,7 +24,7 @@
 
             <form method="post" class="login100-form validate-form">
                 <span class="login100-form-title">
-                    Member Login
+                    Reset your passwords
                 </span>
 
                 <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
@@ -53,9 +53,7 @@
                     <span class="txt1">
                         Forgot
                     </span>
-                    <a class="txt2" href="#">
-                        Username / Password?
-                    </a>
+                    <a class="txt2" asp-controller="Security" asp-action="ResetPasswords">Username / Password?<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i></a>
                 </div>
 
                 @Html.AntiForgeryToken()

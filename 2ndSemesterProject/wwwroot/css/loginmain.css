@@ -446,9 +446,9 @@ iframe {
   }
 }
 
-.footer {
-    position: inherit;
-}
+/*.footer {
+    position: absolute !important;
+}*/
 
 .main-container,
 .main-container .pb-3{
