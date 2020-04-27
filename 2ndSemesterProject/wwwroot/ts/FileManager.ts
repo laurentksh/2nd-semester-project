@@ -48,6 +48,23 @@ enum ApiUrls {
     FilePreview = "file/{0}/preview/"
 }
 
+class CloudFile {
+    ElementId: string; //GUID
+    FileName: string; //Without file ext
+    FileInfo: string; //E.g: PNG File - 5KB
+    DirectUrl: string;
+    DownloadUrl: string;
+    PreviewUrl: string;
+}
+
+class CloudFolder {
+    ElementId: string; //GUID
+    FolderName: string;
+    FolderInfo: string; //E.g: Folder - 36MB
+    DirectUrl: string;
+    DownloadUrl: string;
+}
+
 class ApiInterface {
     public static readonly ApiVersion = "v1";
     public static readonly ApiEndpoint = "api/" + ApiInterface.ApiVersion + "/";
@@ -56,10 +73,10 @@ class ApiInterface {
     public async GetChildFolders(parent: CloudFolder | null): Promise<Array<CloudFolder>> {
         //TODO
 
-        const apiPromise = new Promise<any>((resolve, reject) => $.getJSON(ApiInterface.ApiEndpoint + ApiUrls.ChildFolders.replace("{0}", parent.ElementId), resolve, reject));
+        const apiPromise = new Promise<object>((resolve, reject) => $.getJSON(ApiInterface.ApiEndpoint + ApiUrls.ChildFolders.replace("{0}", parent.ElementId), resolve, reject));
 
         await apiPromise.then();
-
+        Object.setPrototypeOf(await apiPromise.then(), CloudFolder.prototype)
         return null;
     }
 
@@ -72,8 +89,36 @@ class ApiInterface {
 class FileManager {
     private Api: ApiInterface;
 
+    public Current: CloudFolder;
+
     constructor() {
         this.Api = new ApiInterface();
+
+        //Initialize the FileManager with the current file id.
+        //https://localhost/My-Cloud/File/{id}
+
+        var folder = null;
+
+        if (globalThis.window.Current != null) {
+
+        } else {
+            document.URL.split("/File/")[1];
+        }
+
+        if (folder != null)
+            this.Initialize(folder);
+        else { //Could not determine current folder id
+
+        }
+    }
+
+    public Initialize(FolderId: CloudFolder | string | null) {
+
+    }
+
+    public SendFile(): Promise<void> {
+
+        return null;
     }
 
     public async LoadFolder(folder: CloudFolder) {
@@ -166,23 +211,6 @@ class FileManager {
     }
 }
 
-class CloudFile {
-    ElementId: string; //GUID
-    FileName: string; //Without file ext
-    FileInfo: string; //E.g: PNG File - 5KB
-    DirectUrl: string;
-    DownloadUrl: string;
-    PreviewUrl: string;
-}
-
-class CloudFolder {
-    ElementId: string; //GUID
-    FolderName: string;
-    FolderInfo: string; //E.g: Folder - 36MB
-    DirectUrl: string;
-    DownloadUrl: string;
-}
-
 //Main
 
 const fm = new FileManager();
@@ -194,7 +222,40 @@ PreloadImage(ImgLoadingPreviewUrl);
 
 let i = 0;
 
-$(document).ready(function () {
+$(document).ready(() => {
+    var fc = $(".fm-container");
+    var input = fc.find('#fm-input');
+
+
+    fc.on("dragover", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        $(this).addClass('dragging');
+    });
+
+    fc.on("dragleave", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        $(this).removeClass('dragging');
+    });
+
+    fc.on("drop", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        
+        for (const file of event.originalEvent.dataTransfer.files) {
+            fm.
+        }
+    });
+
+    input.on("change", (e) => {
+        
+        
+    });
+
     $("#debug").click(() => {
         console.log("debug clicked");
 

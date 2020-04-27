@@ -43,6 +43,10 @@ var ApiUrls;
     ApiUrls["DownloadFolder"] = "folder/{0}/download/";
     ApiUrls["FilePreview"] = "file/{0}/preview/";
 })(ApiUrls || (ApiUrls = {}));
+class CloudFile {
+}
+class CloudFolder {
+}
 class ApiInterface {
     //Solution: Use a callback
     GetChildFolders(parent) {
@@ -50,6 +54,7 @@ class ApiInterface {
             //TODO
             const apiPromise = new Promise((resolve, reject) => $.getJSON(ApiInterface.ApiEndpoint + ApiUrls.ChildFolders.replace("{0}", parent.ElementId), resolve, reject));
             yield apiPromise.then();
+            Object.setPrototypeOf(yield apiPromise.then(), CloudFolder.prototype);
             return null;
         });
     }
@@ -134,17 +139,33 @@ class FileManager {
         $("#fm-sb-folders").empty();
     }
 }
-class CloudFile {
-}
-class CloudFolder {
-}
 //Main
 const fm = new FileManager();
 PreloadImage(ImgPreviewUrl);
 PreloadImage(ImgFailedLoadingUrl);
 PreloadImage(ImgLoadingPreviewUrl);
 let i = 0;
-$(document).ready(function () {
+$(document).ready(() => {
+    var fc = $(".fm-container");
+    var input = fc.find('#fm-input');
+    fc.on("dragover", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        $(this).addClass('dragging');
+    });
+    fc.on("dragleave", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        $(this).removeClass('dragging');
+    });
+    fc.on("drop", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+    });
+    input.on("change", (e) => {
+        for (var file in this.files) {
+        }
+    });
     $("#debug").click(() => {
         console.log("debug clicked");
         const file = new CloudFile();

@@ -25,9 +25,7 @@ namespace _2ndSemesterProject.Controllers
         [HttpGet("File/{id}")]
         public ActionResult File(Guid id)
         {
-
-            return Json(null);
-            //return View();
+            return View();
         }
 
         [HttpGet("Folder/{id}")]
@@ -36,6 +34,14 @@ namespace _2ndSemesterProject.Controllers
 
             return Json(null);
             //return View();
+        }
+
+        [HttpGet("Path/{*path}")]
+        public ActionResult Path(string path)
+        {
+            ViewBag.Current = Guid.Empty;
+
+            return View();
         }
     }
 }
