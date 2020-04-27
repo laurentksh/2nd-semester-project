@@ -99,10 +99,10 @@ class FileManager {
 
         var folder = null;
 
-        if (globalThis.window.Current != null) {
+        if (/*globalThis.window.Current != null*/false) {
 
         } else {
-            document.URL.split("/File/")[1];
+            document.URL.split("/Folder/")[1];
         }
 
         if (folder != null)

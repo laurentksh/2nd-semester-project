@@ -69,6 +69,23 @@ ApiInterface.ApiEndpoint = "api/" + ApiInterface.ApiVersion + "/";
 class FileManager {
     constructor() {
         this.Api = new ApiInterface();
+        //Initialize the FileManager with the current file id.
+        //https://localhost/My-Cloud/File/{id}
+        var folder = null;
+        if ( /*globalThis.window.Current != null*/false) {
+        }
+        else {
+            document.URL.split("/Folder/")[1];
+        }
+        if (folder != null)
+            this.Initialize(folder);
+        else { //Could not determine current folder id
+        }
+    }
+    Initialize(FolderId) {
+    }
+    SendFile() {
+        return null;
     }
     LoadFolder(folder) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -161,10 +178,11 @@ $(document).ready(() => {
     fc.on("drop", (event) => {
         event.preventDefault();
         event.stopPropagation();
+        for (const file of event.originalEvent.dataTransfer.files) {
+            console.log("Uploading file: " + file.name);
+        }
     });
     input.on("change", (e) => {
-        for (var file in this.files) {
-        }
     });
     $("#debug").click(() => {
         console.log("debug clicked");
