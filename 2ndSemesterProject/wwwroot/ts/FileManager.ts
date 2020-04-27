@@ -247,7 +247,7 @@ $(document).ready(() => {
 
         
         for (const file of event.originalEvent.dataTransfer.files) {
-            fm.
+            console.log("Uploading file: " + file.name);
         }
     });
 
