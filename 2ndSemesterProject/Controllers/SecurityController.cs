@@ -25,7 +25,6 @@ namespace _2ndSemesterProject.Controllers
         public IActionResult ResetPasswords()
         {
             return View();
-
         }
     }  
 }

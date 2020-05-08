@@ -46,7 +46,7 @@ namespace _2ndSemesterProject.Models.Database
         [Required]
         public DateTime LastEditDate { get; set; } = DateTime.UtcNow;
         
-        /// <summary>In MBytes</summary>
+        /// <summary>In Bytes</summary>
         [Required]
         public long FileSize { get; set; }
 

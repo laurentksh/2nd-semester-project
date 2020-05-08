@@ -35,6 +35,18 @@ function DisplayImage(url, element, showIcons = true) {
     console.log("Loading " + img.src);
     img.src = url;
 }
+class CloudFile {
+    constructor(id) {
+        if (id === null)
+            //Throw exception
+            this.ElementId = id;
+    }
+}
+class CloudFolder {
+    constructor(id) {
+        this.ElementId = id;
+    }
+}
 var ApiUrls;
 (function (ApiUrls) {
     ApiUrls["ChildFiles"] = "file/{0}/childs/";
@@ -42,25 +54,52 @@ var ApiUrls;
     ApiUrls["DownloadFile"] = "file/{0}/download/";
     ApiUrls["DownloadFolder"] = "folder/{0}/download/";
     ApiUrls["FilePreview"] = "file/{0}/preview/";
+    ApiUrls["FileUpload"] = "file/upload/";
 })(ApiUrls || (ApiUrls = {}));
-class CloudFile {
-}
-class CloudFolder {
-}
 class ApiInterface {
-    //Solution: Use a callback
+    constructor() {
+        //Perhaps initialize an API token ?
+    }
+    GetUrl(url, id) {
+        if (id === null)
+            return ApiInterface.ApiEndpoint + url;
+        else
+            return ApiInterface.ApiEndpoint + url.replace("{0}", id);
+    }
     GetChildFolders(parent) {
         return __awaiter(this, void 0, void 0, function* () {
-            //TODO
-            const apiPromise = new Promise((resolve, reject) => $.getJSON(ApiInterface.ApiEndpoint + ApiUrls.ChildFolders.replace("{0}", parent.ElementId), resolve, reject));
-            yield apiPromise.then();
-            Object.setPrototypeOf(yield apiPromise.then(), CloudFolder.prototype);
-            return null;
+            const apiPromise = new Promise((resolve, reject) => $.getJSON(this.GetUrl(ApiUrls.ChildFolders, parent.ElementId), resolve, reject));
+            const folders = Object.setPrototypeOf(apiPromise, CloudFolder.prototype);
+            return folders;
         });
     }
     GetChildFiles(folder) {
         return __awaiter(this, void 0, void 0, function* () {
-            return null;
+            const apiPromise = new Promise((resolve, reject) => $.getJSON(this.GetUrl(ApiUrls.ChildFiles, folder.ElementId), resolve, reject));
+            const files = Object.setPrototypeOf(apiPromise, CloudFile.prototype);
+            return files;
+        });
+    }
+    SendFile(files) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = new FormData();
+            for (const file of files) {
+                data.append("file-" + file.name, file, file.name);
+            }
+            $.ajax({
+                url: this.GetUrl(ApiUrls.FileUpload, null),
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: "POST",
+                success: () => {
+                    //Display a sneaky alert to tell the user his files sent correctly.
+                },
+                error: () => {
+                    //Display a sneaky alert to tell the user his files did not sent correctly.
+                }
+            });
         });
     }
 }
@@ -71,21 +110,30 @@ class FileManager {
         this.Api = new ApiInterface();
         //Initialize the FileManager with the current file id.
         //https://localhost/My-Cloud/File/{id}
-        var folder = null;
-        if ( /*globalThis.window.Current != null*/false) {
+        let folder = null;
+        if (globalThis.Current !== null) {
+            folder = new CloudFolder(globalThis.Current);
         }
         else {
             document.URL.split("/Folder/")[1];
         }
-        if (folder != null)
+        if (folder !== null)
             this.Initialize(folder);
         else { //Could not determine current folder id
+            alert("Could not determine folder id. Please reload the page.");
         }
     }
     Initialize(FolderId) {
+        let folder = null;
+        if (typeof (FolderId) !== typeof (CloudFolder)) {
+            folder = new CloudFolder(FolderId);
+        }
+        else
+            folder = FolderId;
+        this.LoadFolder(folder);
     }
-    SendFile() {
-        return null;
+    SendFiles(files) {
+        return this.Api.SendFile(files);
     }
     LoadFolder(folder) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -99,8 +147,7 @@ class FileManager {
                 this.AddFileToMain(file_, true);
             }
             //Displays in which folder the user is currently in
-            $("#fm-sb-folders").find("div[data-folder-id'" + folder.ElementId + "'")
-                .addClass("fm-sb-folders-current");
+            $("#fm-sb-folders").find("div[data-folder-id'" + folder.ElementId + "'").addClass("fm-sb-folders-current");
         });
     }
     LoadSideBar() {
@@ -162,38 +209,37 @@ PreloadImage(ImgPreviewUrl);
 PreloadImage(ImgFailedLoadingUrl);
 PreloadImage(ImgLoadingPreviewUrl);
 let i = 0;
+//https://stackoverflow.com/questions/8363464/jquery-drag-n-drop-files-how-to-get-file-info
 $(document).ready(() => {
-    var fc = $(".fm-container");
-    var input = fc.find('#fm-input');
+    const fc = $(".fm-container");
+    const input = fc.find('#fm-input');
     fc.on("dragover", (event) => {
         event.preventDefault();
         event.stopPropagation();
-        $(this).addClass('dragging');
+        $(this).addClass('fm-dragging');
     });
     fc.on("dragleave", (event) => {
         event.preventDefault();
         event.stopPropagation();
-        $(this).removeClass('dragging');
+        $(this).removeClass('fm-dragging');
     });
     fc.on("drop", (event) => {
         event.preventDefault();
         event.stopPropagation();
-        for (const file of event.originalEvent.dataTransfer.files) {
-            console.log("Uploading file: " + file.name);
-        }
+        fm.SendFiles(event.originalEvent.dataTransfer.files);
     });
-    input.on("change", (e) => {
+    input.on("change", (event) => {
+        console.log("change: " + event);
     });
     $("#debug").click(() => {
         console.log("debug clicked");
-        const file = new CloudFile();
-        file.ElementId = "3B07DD9A-DC09-48E2-B304-E328B9F2AD88";
+        const file = new CloudFile("3B07DD9A-DC09-48E2-B304-E328B9F2AD88");
         file.FileName = "test-file.png " + i++;
         file.FileInfo = "PNG Image - 5KB";
         //file.PreviewUrl = "/api/v1/cloud/preview/" + file.ElementId;
         file.PreviewUrl = ImgPreviewUrl;
         fm.AddFileToMain(file, true);
-        const folder = new CloudFolder();
+        const folder = new CloudFolder(null);
         folder.FolderName = "abc";
         fm.AddFolderToSidebar(folder, true);
     });
