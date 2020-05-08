@@ -2,6 +2,11 @@
 
 }
 
+.fm-dragging {
+    border-color: dodgerblue;
+    border-style: dashed;
+}
+
 .fm-sb-headers {
 
 }

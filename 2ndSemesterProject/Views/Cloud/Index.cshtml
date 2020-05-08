@@ -7,6 +7,11 @@
 }
 
 @section Scripts {
+    <script>
+        @if (ViewBag.Current != null) {
+            @:window.Current = @ViewBag.Current;
+        }
+    </script>
     <script asp-append-version="true" type="text/javascript" src="~/ts/FileManager.js"></script>
 }
 
@@ -27,9 +32,13 @@
                 <button id="debug">Debug</button>
             </div>
         </div>
-
+        <script>
+            
+        </script>
         <div class="fm-content col-xl">
-            <div class="container">
+            <div class="fm-container">
+                <input id="fm-input" />
+
                 <!-- File Container -->
                 <div class="row" id="file-container">
                     <!-- Files -->

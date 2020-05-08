@@ -9,6 +9,9 @@ using _2ndSemesterProject.Models;
 using _2ndSemesterProject.Models.Database;
 using System.Security.Claims;
 using _2ndSemesterProject.Controllers;
+using _2ndSemesterProject.Models.Api.Cloud;
+using System.IO;
+using System.Net;
 
 namespace _2ndSemesterProject.Controllers.Api.v1
 {
@@ -17,6 +20,8 @@ namespace _2ndSemesterProject.Controllers.Api.v1
     [Route("api/v{version:apiVersion}/cloud")]
     public class CloudController : ControllerBase
     {
+        public const long MAX_SIZE_PER_REQUEST = 17179869184; //16GB
+
         [HttpGet("file/{id}")]
         public IActionResult GetFile(Guid id)
         {
@@ -152,6 +157,56 @@ namespace _2ndSemesterProject.Controllers.Api.v1
             //TODO
 
             return new FileStreamResult(null, "application/zip");
+        }
+
+        [HttpPost("file/upload")]
+        public async Task<IActionResult> UploadFileAsync(Guid parent, List<IFormFile> files)
+        {
+            //TODO: Create response models
+
+            ApplicationDbContext dbContext = new ApplicationDbContext();
+            AppUser user = null;
+
+            //Boilerplate code for checking if the user is allowed to download the file
+            if (!User.Identity.IsAuthenticated)
+                return new UnauthorizedResult();
+
+            user = this.GetUser();
+
+            long maxByteTotalRequestSize = 0;
+
+            foreach (IFormFile file in files) {
+                maxByteTotalRequestSize += file.Length;
+
+                if (maxByteTotalRequestSize > MAX_SIZE_PER_REQUEST)
+                    return new JsonResult(new ResponseModel() { Status = ResponseModel.Status_.FAIL, Body = "REQUEST_MAX_TOTAL_SIZE_REACHED" });
+
+                if (file.Length > user.AccountPlan.FileSizeLimit) { //File too big
+                    return new JsonResult(new ResponseModel() { Status = ResponseModel.Status_.OK, Body = "FILE_MAX_SIZE_REACHED" });
+                }
+
+                string filename = WebUtility.HtmlEncode(file.FileName);
+                
+                CloudFile dbFile = new CloudFile()
+                {
+                    FileName = filename,
+                    FileNameWithoutExt = Path.GetFileNameWithoutExtension(filename),
+                    FileExtension = Path.GetExtension(filename),
+                    FileSize = file.Length,
+                    IsPublic = false,
+                    Owner = user,
+                    Parent = parent == null ? null : dbContext.Folders.Single((x) => x.FolderId == parent),
+                };
+
+                await dbContext.Files.AddAsync(dbFile);
+                await dbContext.SaveChangesAsync();
+                
+                await FileSystemMiddleman.SaveFile(file.OpenReadStream(), user, dbFile);
+            }
+
+            await dbContext.SaveChangesAsync();
+
+            return new JsonResult(new ResponseModel() { Status = ResponseModel.Status_.OK, Body = "FILE_SAVED"});
         }
     }
 }

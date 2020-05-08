@@ -23,6 +23,7 @@ nav.navbar {
     background-color: #0aa4d2 !important;
     z-index: 9999;
     margin: 0px !important;
+    padding: .6rem 1rem;
 }
 nav.navbar .navbar-brand,
 nav.navbar .navbar-brand:hover,
@@ -44,6 +45,7 @@ li.nav-item .nav-link.lien:focus {
     border-top-right-radius: 3px;
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
+    font-size: 17px;
 }
 
 

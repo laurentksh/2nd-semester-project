@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using _2ndSemesterProject.Data;
 using _2ndSemesterProject.Models.Database;
 using Microsoft.AspNetCore.Mvc;

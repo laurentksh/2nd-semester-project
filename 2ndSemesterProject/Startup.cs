@@ -38,41 +38,55 @@ namespace _2ndSemesterProject
                     Configuration.GetConnectionString("DefaultConnection")), 128);
 
             // Anti-Forgery
-            var options = new AntiforgeryOptions
+            services.AddAntiforgery();
+            services.Configure<AntiforgeryOptions>(options =>
             {
-                FormFieldName = "ASP-AF",
-                HeaderName = "ASP-AF-HEADER",
-                SuppressXFrameOptionsHeader = false
-            };
-
-            services.AddAntiforgery(o1 => o1 = options);
+                options.FormFieldName = "ASP-AF";
+                options.HeaderName = "ASP-AF-HEADER";
+                options.SuppressXFrameOptionsHeader = false;
+            });
 
             // Localization
-            var options2 = new LocalizationOptions();
-
-            services.AddLocalization(o2 => o2 = options2);
-
-            // API Versioning
-            var options3 = new ApiVersioningOptions
+            services.AddLocalization();
+            services.Configure<LocalizationOptions>(options =>
             {
                 
-            };
+            });
 
-            services.AddApiVersioning(o3 => o3 = options3);
+            // API Versioning
+            services.AddApiVersioning();
+            services.Configure<ApiVersioningOptions>(options =>
+            {
+
+            });
+
+
+            services.AddIdentity<AppUser, AppRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             // Identity
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequiredUniqueChars = 4;
+                options.Password.RequireNonAlphanumeric = false;
+                options.User.RequireUniqueEmail = true;
 
-            var identityOpt = new IdentityOptions();
-            identityOpt.SignIn.RequireConfirmedEmail = true;
-            identityOpt.Password.RequiredLength = 8;
-            identityOpt.Password.RequiredUniqueChars = 4;
-            identityOpt.Password.RequireNonAlphanumeric = false;
-            identityOpt.User.RequireUniqueEmail = true;
+                options.Lockout.MaxFailedAccessAttempts = 5;
+            });
+            
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-            services.AddIdentity<AppUser, AppRole>(o4 => o4 = identityOpt)
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders()
-                .AddDefaultUI();
+                options.LoginPath = "/Security/Login";
+                options.AccessDeniedPath = "/Security/AccessDenied";
+                options.SlidingExpiration = true;
+            });
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -81,12 +95,10 @@ namespace _2ndSemesterProject
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            using (IServiceScope scope = app.ApplicationServices.CreateScope())
-            {
+            using (IServiceScope scope = app.ApplicationServices.CreateScope()) {
                 //Get services here
 
-                using (ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-                {
+                using (ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>()) {
                     dbContext.Database.EnsureCreated();
                 }
             }
@@ -99,7 +111,7 @@ namespace _2ndSemesterProject
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -107,7 +119,7 @@ namespace _2ndSemesterProject
 
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

@@ -21,9 +21,16 @@ namespace _2ndSemesterProject
         public const int IO_OP_TIMEOUT = 60;
 
         /// <summary>
+        /// IO Operation Buffer size.
+        /// </summary>
+        public const int BUFFER_SIZE = 16384;
+
+        /// <summary>
         /// Relative or Absolute path
         /// </summary>
         private static string BasePath = "/UserFiles/";
+
+        public static Exception LastException;
 
         /// <summary>
         /// Get the FileStream for the specified relative path. (Direct access)
@@ -86,6 +93,56 @@ namespace _2ndSemesterProject
         public static async Task<bool> SaveFile(byte[] data, AppUser user, CloudFile file, string toAppend = null)
         {
             return await SaveFile(data, Path.Combine(user.Id.ToString(), file.FileId.ToString() + toAppend));
+        }
+
+        /// <summary>
+        /// Save a Stream to the specified path asynchronously.
+        /// 
+        /// The default timeout delay is available at <see cref="IO_OP_TIMEOUT"/>
+        /// </summary>
+        /// <param name="relativePath"></param>
+        /// <param name="data"></param>
+        /// <returns>true: the IO op. was successfull. false: the IO op. failed or took too much time.</returns>
+        public static async Task<bool> SaveFile(Stream data, AppUser user, CloudFile file, string toAppend = null)
+        {
+            CancellationToken token = new CancellationTokenSource(TimeSpan.FromSeconds(IO_OP_TIMEOUT)).Token;
+            string fp = Path.Combine(BasePath, Path.Combine(user.Id.ToString(), file.FileId.ToString() + toAppend));
+            FileStream fs = null;
+
+            try {
+                fs = File.OpenWrite(fp);
+            } catch (Exception ex) {
+                LastException = ex;
+                return false;
+            }
+
+            //https://stackoverflow.com/a/58577829/7313891
+
+            try {
+                using (var ms = new MemoryStream()) {
+                    await data.CopyToAsync(ms, token);
+                    var memBuffer = ms.GetBuffer();
+
+                    for (int i = 0; i < memBuffer.Length; i++) {
+                        var nBuffer = new byte[BUFFER_SIZE];
+
+                        for (int j = 0; j < nBuffer.Length && i < memBuffer.Length; j++) {
+                            nBuffer[j] = memBuffer[i];
+                            i++;
+                        }
+
+                        await fs.WriteAsync(nBuffer, 0, nBuffer.Length);
+                    }
+                }
+            } catch (Exception ex) {
+                LastException = ex;
+                return false;
+            }
+
+            await fs.FlushAsync(token);
+            await fs.DisposeAsync();
+
+            return true;
         }
     }
 }
