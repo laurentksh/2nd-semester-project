@@ -64,6 +64,7 @@ namespace _2ndSemesterProject
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+            //  .AddDefaultUI();
 
             // Identity
             services.Configure<IdentityOptions>(options =>
