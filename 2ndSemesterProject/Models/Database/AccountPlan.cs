@@ -26,10 +26,10 @@ namespace _2ndSemesterProject.Models.Database
         /// <summary>Plan price per year (in CHF)</summary>
         public float PricePerYear { get; set; }
 
-        /// <summary>Max storage per account</summary>
-        public int GlobalStorageLimit { get; set; }
+        /// <summary>Max storage per account (In Bytes)</summary>
+        public long GlobalStorageLimit { get; set; }
 
-        /// <summary>Max file size</summary>
+        /// <summary>Max file size (In Bytes)</summary>
         public long FileSizeLimit { get; set; }
 
 
@@ -44,5 +44,21 @@ namespace _2ndSemesterProject.Models.Database
 
         [InverseProperty(nameof(AppUser.AccountPlan))]
         public List<AppUser> Users { get; set; }
+
+
+        public static AccountPlan GetFreeTier()
+        {
+            var freeTier = new AccountPlan
+            {
+                Name = "Free",
+                PricePerMonth = 0f,
+                PricePerYear = 0f,
+                State = AccountPlanState.Available,
+                FileSizeLimit = 500_000_000L,
+                GlobalStorageLimit = 15_000_000_000L,
+            };
+
+            return freeTier;
+        }
     }
 }

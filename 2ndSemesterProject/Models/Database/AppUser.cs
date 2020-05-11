@@ -23,7 +23,7 @@ namespace _2ndSemesterProject.Models.Database
 
         [ForeignKey(nameof(AccountPlan))]
         public Guid AccountPlanId { get; set; }
-        
+
         public AccountPlan AccountPlan { get; set; }
 
 
