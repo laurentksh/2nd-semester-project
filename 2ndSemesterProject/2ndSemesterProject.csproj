@@ -30,6 +30,8 @@
     <Compile Remove="Migrations\20200407011606_FixedCloudFS2.Designer.cs" />
     <Compile Remove="Migrations\20200407012122_FixedCloudFS2.cs" />
     <Compile Remove="Migrations\20200407012122_FixedCloudFS2.Designer.cs" />
+    <Compile Remove="Migrations\20200410212643_Initial.cs" />
+    <Compile Remove="Migrations\20200410212643_Initial.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,6 +56,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
+    <PackageReference Include="SendGrid" Version="9.14.1" />
   </ItemGroup>
 
 

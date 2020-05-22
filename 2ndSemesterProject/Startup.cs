@@ -17,6 +17,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using _2ndSemesterProject.Models;
 using _2ndSemesterProject.Models.Database;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using SendGrid;
+using _2ndSemesterProject.Services;
 
 namespace _2ndSemesterProject
 {
@@ -60,10 +63,13 @@ namespace _2ndSemesterProject
 
             });
 
+            services.AddTransient<IEmailSender, SendGridEmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
 
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+            //  .AddDefaultUI();
 
             // Identity
             services.Configure<IdentityOptions>(options =>
@@ -100,6 +106,11 @@ namespace _2ndSemesterProject
 
                 using (ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>()) {
                     dbContext.Database.EnsureCreated();
+
+                    if (dbContext.AccountPlans.FirstOrDefault() == null && dbContext.AccountPlans.FirstOrDefault().Name != "Free") { //Make sure the free tier is created.
+                        dbContext.AccountPlans.Add(AccountPlan.GetFreeTier());
+                        dbContext.SaveChanges();
+                    }
                 }
             }
 

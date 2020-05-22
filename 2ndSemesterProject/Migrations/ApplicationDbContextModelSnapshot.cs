@@ -129,8 +129,8 @@ namespace _2ndSemesterProject.Migrations
                     b.Property<long>("FileSizeLimit")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("GlobalStorageLimit")
-                        .HasColumnType("int");
+                    b.Property<long>("GlobalStorageLimit")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");

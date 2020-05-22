@@ -10,7 +10,7 @@ using _2ndSemesterProject.Data;
 namespace _2ndSemesterProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200410212643_Initial")]
+    [Migration("20200511154815_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -131,8 +131,8 @@ namespace _2ndSemesterProject.Migrations
                     b.Property<long>("FileSizeLimit")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("GlobalStorageLimit")
-                        .HasColumnType("int");
+                    b.Property<long>("GlobalStorageLimit")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
