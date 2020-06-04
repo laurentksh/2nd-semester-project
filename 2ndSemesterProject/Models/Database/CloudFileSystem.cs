@@ -38,11 +38,11 @@ namespace _2ndSemesterProject.Models.Database
         [Required]
         public bool IsPublic { get; set; } = false;
 
-        /// <summary>When the file was created/uploaded</summary>
+        /// <summary>UTC. When the file was created/uploaded</summary>
         [Required]
         public DateTime CreationDate { get; set; } = DateTime.UtcNow;
 
-        /// <summary>Last time the file was edited</summary>
+        /// <summary>UTC. Last time the file was edited</summary>
         [Required]
         public DateTime LastEditDate { get; set; } = DateTime.UtcNow;
         
@@ -78,7 +78,7 @@ namespace _2ndSemesterProject.Models.Database
         [Required]
         public bool IsPublic { get; set; } = false;
 
-        /// <summary>When the folder was created/uploaded</summary>
+        /// <summary>UTC. When the folder was created/uploaded</summary>
         [Required]
         public DateTime CreationDate { get; set; } = DateTime.UtcNow;
 
@@ -110,7 +110,7 @@ namespace _2ndSemesterProject.Models.Database
         [Key]
         public Guid Id { get; set; }
 
-        /// <summary>DateTime.MinValue: No expiration</summary>
+        /// <summary>UTC. DateTime.MinValue: No expiration</summary>
         [Required]
         public DateTime ExpirationDate { get; set; } = DateTime.MinValue;
 
@@ -140,7 +140,7 @@ namespace _2ndSemesterProject.Models.Database
         [Key]
         public Guid Id { get; set; }
 
-        /// <summary>DateTime.MinValue: No expiration</summary>
+        /// <summary>UTC. DateTime.MinValue: No expiration</summary>
         [Required]
         public DateTime ExpirationDate { get; set; } = DateTime.MinValue;
         

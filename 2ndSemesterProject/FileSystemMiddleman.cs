@@ -61,6 +61,11 @@ namespace _2ndSemesterProject
             return GetFile(Path.Combine(file.OwnerId.ToString(), file.FileId.ToString() + toAppend));
         }
 
+        public static string GetAbsolutePath(CloudFile file)
+        {
+            return Path.Combine(file.OwnerId.ToString(), file.FileId.ToString());
+        }
+
         /// <summary>
         /// Save binary data to the specified path asynchronously.
         /// 
