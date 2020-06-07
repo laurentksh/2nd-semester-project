@@ -19,7 +19,7 @@ namespace _2ndSemesterProject.Data
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options = default) : base(options)
         {
-
+            
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

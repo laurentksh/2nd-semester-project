@@ -53,7 +53,7 @@ namespace _2ndSemesterProject
             services.AddLocalization();
             services.Configure<LocalizationOptions>(options =>
             {
-                
+
             });
 
             // API Versioning
@@ -66,14 +66,10 @@ namespace _2ndSemesterProject
             services.AddTransient<IEmailSender, SendGridEmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
-            services.AddIdentity<AppUser, AppRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-            //  .AddDefaultUI();
-
             // Identity
-            services.Configure<IdentityOptions>(options =>
+            services.AddIdentity<AppUser, AppRole>(options =>
             {
+                options.SignIn.RequireConfirmedAccount = true;
                 options.SignIn.RequireConfirmedEmail = true;
                 options.Password.RequiredLength = 8;
                 options.Password.RequiredUniqueChars = 4;
@@ -81,20 +77,29 @@ namespace _2ndSemesterProject
                 options.User.RequireUniqueEmail = true;
 
                 options.Lockout.MaxFailedAccessAttempts = 5;
-            });
-            
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders()
+                .AddUserManager<UserManager<AppUser>>();
+
+
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-
-                options.LoginPath = "/Security/Login";
-                options.AccessDeniedPath = "/Security/AccessDenied";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.MaxDepth = 128;
+                });
+
             services.AddRazorPages();
         }
 
@@ -106,11 +111,73 @@ namespace _2ndSemesterProject
 
                 using (ApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>()) {
                     dbContext.Database.EnsureCreated();
+                    //dbContext.Database.Migrate();
 
-                    if (dbContext.AccountPlans.FirstOrDefault() == null && dbContext.AccountPlans.FirstOrDefault().Name != "Free") { //Make sure the free tier is created.
+                    //If there are exceptions here, ensure the database is properly created
+                    //(using Update-Database <Migration>
+
+                    //WARNING: Do not use this on large tables
+                    //https://stackoverflow.com/a/24520014
+                    //UPDATE: This is fucking up the foreign keys
+                    /*dbContext.AccountPlans.RemoveRange(dbContext.AccountPlans);
+                    dbContext.SaveChanges();*/
+
+                    //Make sure the tiers are created.
+                    if (dbContext.AccountPlans.SingleOrDefault(x => x.Name == "Free") == null) {
                         dbContext.AccountPlans.Add(AccountPlan.GetFreeTier());
-                        dbContext.SaveChanges();
+                    } else {
+                        var target = AccountPlan.GetFreeTier();
+                        var origin = dbContext.AccountPlans.Single(a => a.Name == target.Name);
+
+                        origin.PricePerMonth = target.PricePerMonth;
+                        origin.ReductionPerMonth = target.ReductionPerMonth;
+                        origin.PricePerYear = target.PricePerYear;
+                        origin.ReductionPerYear = target.ReductionPerYear;
+
+                        origin.State = target.State;
+
+                        origin.FileSizeLimit = target.FileSizeLimit;
+                        origin.FileTransferSize = target.FileTransferSize;
+                        origin.GlobalStorageLimit = target.GlobalStorageLimit;
                     }
+
+                    if (dbContext.AccountPlans.SingleOrDefault(x => x.Name == "Plus") == null) {
+                        dbContext.AccountPlans.Add(AccountPlan.GetPlusTier());
+                    } else {
+                        var target = AccountPlan.GetPlusTier();
+                        var origin = dbContext.AccountPlans.Single(a => a.Name == target.Name);
+
+                        origin.PricePerMonth = target.PricePerMonth;
+                        origin.ReductionPerMonth = target.ReductionPerMonth;
+                        origin.PricePerYear = target.PricePerYear;
+                        origin.ReductionPerYear = target.ReductionPerYear;
+
+                        origin.State = target.State;
+
+                        origin.FileSizeLimit = target.FileSizeLimit;
+                        origin.FileTransferSize = target.FileTransferSize;
+                        origin.GlobalStorageLimit = target.GlobalStorageLimit;
+                    }
+
+                    if (dbContext.AccountPlans.SingleOrDefault(x => x.Name == "Pro") == null) {
+                        dbContext.AccountPlans.Add(AccountPlan.GetProTier());
+                    } else {
+                        var target = AccountPlan.GetProTier();
+                        var origin = dbContext.AccountPlans.Single(a => a.Name == target.Name);
+
+                        origin.PricePerMonth = target.PricePerMonth;
+                        origin.ReductionPerMonth = target.ReductionPerMonth;
+                        origin.PricePerYear = target.PricePerYear;
+                        origin.ReductionPerYear = target.ReductionPerYear;
+
+                        origin.State = target.State;
+
+                        origin.FileSizeLimit = target.FileSizeLimit;
+                        origin.FileTransferSize = target.FileTransferSize;
+                        origin.GlobalStorageLimit = target.GlobalStorageLimit;
+                    }
+
+                    dbContext.SaveChanges();
                 }
             }
 

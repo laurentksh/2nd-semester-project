@@ -18,6 +18,8 @@ namespace _2ndSemesterProject.Controllers
             /*if (!User.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");*/
 
+            ViewBag.Current = "root";
+
             return View();
         }
 
@@ -31,9 +33,9 @@ namespace _2ndSemesterProject.Controllers
         [HttpGet("Folder/{id}")]
         public ActionResult Folder(Guid id)
         {
+            ViewBag.Current = id;
 
-            return Json(null);
-            //return View();
+            return View();
         }
 
         [HttpGet("Path/{*path}")]

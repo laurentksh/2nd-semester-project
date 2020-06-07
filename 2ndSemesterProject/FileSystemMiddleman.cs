@@ -28,7 +28,7 @@ namespace _2ndSemesterProject
         /// <summary>
         /// Relative or Absolute path
         /// </summary>
-        private static string BasePath = "/UserFiles/";
+        private static string BasePath = @"UserFiles\";
 
         public static Exception LastException;
 
@@ -58,7 +58,12 @@ namespace _2ndSemesterProject
         /// <returns>A FileStream, or null if none found.</returns>
         public static FileStream GetFile(CloudFile file, string toAppend = null)
         {
-            return GetFile(Path.Combine(file.OwnerId.ToString(), file.FileId.ToString() + toAppend));
+            return GetFile(GetAbsolutePath(file) + toAppend);
+        }
+
+        public static string GetAbsolutePath(CloudFile file)
+        {
+            return Path.Combine(file.OwnerId.ToString(), file.FileId.ToString());
         }
 
         /// <summary>
@@ -71,13 +76,55 @@ namespace _2ndSemesterProject
         /// <returns>true: the IO op. was successfull. false: the IO op. failed or took too much time.</returns>
         public static async Task<bool> SaveFile(byte[] data, string relativePath)
         {
+            return await SaveFile(new MemoryStream(data), relativePath);
+        }
+
+        public static async Task<bool> SaveFile(Stream data, string relativePath)
+        {
             CancellationToken token = new CancellationTokenSource(TimeSpan.FromSeconds(IO_OP_TIMEOUT)).Token;
-            
+            string fp = Path.Combine(BasePath, relativePath);
+            string folder = Path.GetDirectoryName(fp);
+
+            if (!Directory.Exists(BasePath))
+                Directory.CreateDirectory(BasePath);
+            if (!Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
+
+            FileStream fs;
             try {
-                await File.WriteAllBytesAsync(Path.Combine(BasePath, relativePath), data, token);
-            } catch (Exception) {
+                fs = File.OpenWrite(fp);
+            } catch (Exception ex) {
+                LastException = ex;
                 return false;
             }
+
+            //https://stackoverflow.com/a/58577829/7313891
+            try {
+                using var ms = new MemoryStream();
+                await data.CopyToAsync(ms, token);
+                var memBuffer = ms.GetBuffer();
+
+                for (int i = 0; i < memBuffer.Length; i++) {
+                    token.ThrowIfCancellationRequested();
+
+                    var nBuffer = new byte[BUFFER_SIZE];
+
+                    for (int j = 0; j < nBuffer.Length && i < memBuffer.Length; j++) {
+                        token.ThrowIfCancellationRequested();
+
+                        nBuffer[j] = memBuffer[i];
+                        i++;
+                    }
+
+                    await fs.WriteAsync(nBuffer, 0, nBuffer.Length);
+                }
+            } catch (Exception ex) {
+                LastException = ex;
+                return false;
+            }
+
+            await data.DisposeAsync();
+            await fs.DisposeAsync();
 
             return true;
         }
@@ -92,7 +139,7 @@ namespace _2ndSemesterProject
         /// <returns>true: the IO op. was successfull. false: the IO op. failed or took too much time.</returns>
         public static async Task<bool> SaveFile(byte[] data, AppUser user, CloudFile file, string toAppend = null)
         {
-            return await SaveFile(data, Path.Combine(user.Id.ToString(), file.FileId.ToString() + toAppend));
+            return await SaveFile(new MemoryStream(data), user, file, toAppend);
         }
 
         /// <summary>
@@ -105,44 +152,7 @@ namespace _2ndSemesterProject
         /// <returns>true: the IO op. was successfull. false: the IO op. failed or took too much time.</returns>
         public static async Task<bool> SaveFile(Stream data, AppUser user, CloudFile file, string toAppend = null)
         {
-            CancellationToken token = new CancellationTokenSource(TimeSpan.FromSeconds(IO_OP_TIMEOUT)).Token;
-            string fp = Path.Combine(BasePath, Path.Combine(user.Id.ToString(), file.FileId.ToString() + toAppend));
-            FileStream fs = null;
-
-            try {
-                fs = File.OpenWrite(fp);
-            } catch (Exception ex) {
-                LastException = ex;
-                return false;
-            }
-
-            //https://stackoverflow.com/a/58577829/7313891
-
-            try {
-                using (var ms = new MemoryStream()) {
-                    await data.CopyToAsync(ms, token);
-                    var memBuffer = ms.GetBuffer();
-
-                    for (int i = 0; i < memBuffer.Length; i++) {
-                        var nBuffer = new byte[BUFFER_SIZE];
-
-                        for (int j = 0; j < nBuffer.Length && i < memBuffer.Length; j++) {
-                            nBuffer[j] = memBuffer[i];
-                            i++;
-                        }
-
-                        await fs.WriteAsync(nBuffer, 0, nBuffer.Length);
-                    }
-                }
-            } catch (Exception ex) {
-                LastException = ex;
-                return false;
-            }
-
-            await fs.FlushAsync(token);
-            await fs.DisposeAsync();
-
-            return true;
+            return await SaveFile(data, Path.Combine(user.Id.ToString(), file.FileId.ToString() + toAppend));
         }
     }
 }

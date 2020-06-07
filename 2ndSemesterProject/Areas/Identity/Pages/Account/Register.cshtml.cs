@@ -62,6 +62,12 @@ namespace _2ndSemesterProject.Areas.Identity.Pages.Account
             public string LastName { get; set; }
 
             [Required]
+            [StringLength(32, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
+            [DataType(DataType.Text)]
+            [Display(Name = "Username")]
+            public string Username { get; set; }
+
+            [Required]
             [DataType(DataType.Date)]
             [Display(Name = "Birthday", Description = "You must be 13 years old or more.")]
             public DateTime Birthday { get; set; }
@@ -92,19 +98,21 @@ namespace _2ndSemesterProject.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid) {
                 var user = new AppUser
                 {
                     FirstName = Input.FirstName,
                     LastName = Input.LastName,
                     BirthDay = Input.Birthday,
-                    UserName = Input.Email,
+                    UserName = Input.Username,
                     Email = Input.Email,
-                    AccountPlan = _dbContext.AccountPlans.First()
+                    AccountPlan = _dbContext.AccountPlans.SingleOrDefault(a => a.Name == "Free") //Set the free tier as default
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
                 if (result.Succeeded) {
                     _logger.LogInformation("User created a new account with password.");
 

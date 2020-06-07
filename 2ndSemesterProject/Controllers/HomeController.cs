@@ -9,6 +9,8 @@ using _2ndSemesterProject.Models;
 using System.Globalization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using _2ndSemesterProject.Data;
+using _2ndSemesterProject.Controllers.Api.v1;
 
 namespace _2ndSemesterProject.Controllers
 {
@@ -18,10 +20,13 @@ namespace _2ndSemesterProject.Controllers
         private readonly ILogger<HomeController> _logger;   
         private readonly IActionDescriptorCollectionProvider _provider;
 
-        public HomeController(ILogger<HomeController> logger, IActionDescriptorCollectionProvider provider)
+        private ApplicationDbContext _dbContext;
+
+        public HomeController(ILogger<HomeController> logger, IActionDescriptorCollectionProvider provider, ApplicationDbContext dbContext)
         {
             _logger = logger;
             _provider = provider;
+            _dbContext = dbContext;
         }
 
         [Route("")]
@@ -31,10 +36,30 @@ namespace _2ndSemesterProject.Controllers
             return View();
         }
 
+        [Route("Pricing")]
+        public IActionResult Pricing()
+        {
+            PricingModels pricingModels = new PricingModels
+            {
+                FreeTier = _dbContext.AccountPlans.Single(x => x.Name == "Free"),
+                PlusTier = _dbContext.AccountPlans.Single(x => x.Name == "Plus"),
+                ProTier = _dbContext.AccountPlans.Single(x => x.Name == "Pro"),
+            };
+
+            return View(pricingModels);
+        }
+
         [Route("Privacy")]
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        [Route("download/{fileid}")]
+        [Route("dl/{fileid}")]
+        public IActionResult Download(string fileid)
+        {
+            return Redirect($"/api/v1/cloud/file/{fileid}/download");
         }
 
         [Route("Debug/AllViews")]

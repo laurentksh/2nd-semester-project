@@ -21,9 +21,9 @@ namespace _2ndSemesterProject.Models.Database
         public DateTime BirthDay { get; set; }
 
 
-        [ForeignKey(nameof(AccountPlan))]
-        public Guid AccountPlanId { get; set; }
+        public long AccountPlanId { get; set; }
 
+        [ForeignKey(nameof(AccountPlanId))]
         public AccountPlan AccountPlan { get; set; }
 
 
