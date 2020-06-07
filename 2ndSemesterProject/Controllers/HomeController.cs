@@ -10,6 +10,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using _2ndSemesterProject.Data;
+using _2ndSemesterProject.Controllers.Api.v1;
 
 namespace _2ndSemesterProject.Controllers
 {
@@ -52,6 +53,13 @@ namespace _2ndSemesterProject.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        [Route("download/{fileid}")]
+        [Route("dl/{fileid}")]
+        public IActionResult Download(string fileid)
+        {
+            return Redirect($"/api/v1/cloud/file/{fileid}/download");
         }
 
         [Route("Debug/AllViews")]

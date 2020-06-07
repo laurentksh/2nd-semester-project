@@ -23,6 +23,9 @@ namespace _2ndSemesterProject
         {
             var userUncomplete = await userManager.GetUserAsync(controller.User);
 
+            if (userUncomplete == null)
+                return null;
+
             if (!Guid.TryParse(await userManager.GetUserIdAsync(userUncomplete), out Guid userId))
                 return null;
 

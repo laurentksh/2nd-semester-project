@@ -80,65 +80,64 @@ var AlertStyle;
     AlertStyle["Light"] = "alert-light";
     AlertStyle["Dark"] = "alert-dark";
 })(AlertStyle || (AlertStyle = {}));
-let ApiInterface = /** @class */ (() => {
-    class ApiInterface {
-        constructor() {
-            //Perhaps initialize an API token ?
-        }
-        GetUrl(url, id) {
-            if (id === null)
-                return ApiInterface.ApiEndpoint + url;
-            else
-                return ApiInterface.ApiEndpoint + url.replace("{0}", id);
-        }
-        GetChildFolders(parent) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const apiPromise = new Promise((resolve, reject) => $.getJSON(this.GetUrl(ApiUrls.ChildFolders, parent.ElementId), resolve, reject));
-                //const folders: Array<CloudFolder> = Object.setPrototypeOf(await apiPromise /* Wait for the request to be completed */, CloudFolder.prototype)
-                return /*folders;*/ Object.assign(new Array(), yield apiPromise);
-            });
-        }
-        GetChildFiles(parent) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const apiPromise = new Promise((resolve, reject) => $.getJSON(this.GetUrl(ApiUrls.ChildFiles, parent.ElementId), resolve, reject));
-                //const json: Array<any> = await apiPromise
-                //const files: Array<CloudFile> = new Array<CloudFile>(json)
-                /*for (const file in await apiPromise) {
-        
-                }*/
-                //const files: Array<CloudFile> = Object.setPrototypeOf(await apiPromise, Array<CloudFolder>())
-                return /*files;*/ Object.assign(new Array(), yield apiPromise);
-            });
-        }
-        SendFile(files, parent) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const data = new FormData();
-                data.append("ParentFolder", parent.ElementId);
-                for (const file of files) {
-                    data.append("File", file, file.name);
-                }
-                $.ajax({
-                    url: this.GetUrl(ApiUrls.FileUpload, null),
-                    data: data,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    method: "POST",
-                    success: () => {
-                        //Display a sneaky alert to tell the user his files sent correctly.
-                    },
-                    error: () => {
-                        //Display a sneaky alert to tell the user his files did not sent correctly.
-                        alert("An error occured while sending the file(s).");
-                    }
-                });
-            });
-        }
+class ApiInterface {
+    constructor() {
+        //Perhaps initialize an API token ?
     }
-    ApiInterface.ApiVersion = "v1";
-    ApiInterface.ApiEndpoint = "api/" + ApiInterface.ApiVersion + "/cloud/";
-    return ApiInterface;
-})();
+    GetUrl(url, id) {
+        if (id === null)
+            return ApiInterface.ApiEndpoint + url;
+        else
+            return ApiInterface.ApiEndpoint + url.replace("{0}", id);
+    }
+    GetChildFolders(parent) {
+        return __awaiter(this, void 0, void 0, function* () {
+            //TODO: Parse manually the json nodes
+            const apiPromise = new Promise((resolve, reject) => $.getJSON(this.GetUrl(ApiUrls.ChildFolders, parent.ElementId), resolve, reject));
+            //const folders: Array<CloudFolder> = Object.setPrototypeOf(await apiPromise /* Wait for the request to be completed */, CloudFolder.prototype)
+            return /*folders;*/ Object.assign(new Array(), yield apiPromise);
+        });
+    }
+    GetChildFiles(parent) {
+        return __awaiter(this, void 0, void 0, function* () {
+            //TODO: Parse manually the json nodes
+            const apiPromise = new Promise((resolve, reject) => $.getJSON(this.GetUrl(ApiUrls.ChildFiles, parent.ElementId), resolve, reject));
+            //const json: Array<any> = await apiPromise
+            //const files: Array<CloudFile> = new Array<CloudFile>()
+            /*for (const file in await apiPromise) {
+    
+            }*/
+            //const files: Array<CloudFile> = Object.setPrototypeOf(await apiPromise, Array<CloudFolder>())
+            return /*files;*/ Object.assign(new Array(), yield apiPromise);
+        });
+    }
+    SendFile(files, parent) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = new FormData();
+            data.append("ParentFolder", parent.ElementId);
+            for (const file of files) {
+                data.append("File", file, file.name);
+            }
+            $.ajax({
+                url: this.GetUrl(ApiUrls.FileUpload, null),
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: "POST",
+                success: () => {
+                    //Display a sneaky alert to tell the user his files sent correctly.
+                },
+                error: () => {
+                    //Display a sneaky alert to tell the user his files did not sent correctly.
+                    alert("An error occured while sending the file(s).");
+                }
+            });
+        });
+    }
+}
+ApiInterface.ApiVersion = "v1";
+ApiInterface.ApiEndpoint = "api/" + ApiInterface.ApiVersion + "/cloud/";
 class FileManager {
     constructor() {
         this.Api = new ApiInterface();

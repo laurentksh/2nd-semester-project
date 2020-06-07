@@ -89,8 +89,8 @@ namespace _2ndSemesterProject
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
                 
-                options.LoginPath = "/Security/Login";
-                options.AccessDeniedPath = "/Security/AccessDenied";
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
 

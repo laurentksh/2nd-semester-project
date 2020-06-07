@@ -88,10 +88,7 @@ namespace _2ndSemesterProject.Controllers.Api.v1
                 filesJson.Add(GetFileAsJson(file));
             }
 
-            var j = new JsonResult(filesJson);
-            Console.WriteLine(j.Value);
-
-            return j;
+            return new JsonResult(filesJson);
         }
 
         [HttpGet("folder/{id}/childs/")]

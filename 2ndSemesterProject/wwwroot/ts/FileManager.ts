@@ -157,6 +157,8 @@ class ApiInterface {
     }
 
     public async GetChildFolders(parent: CloudFolder): Promise<Array<CloudFolder>> {
+        //TODO: Parse manually the json nodes
+
         const apiPromise = new Promise<object>((resolve, reject) => $.getJSON(this.GetUrl(ApiUrls.ChildFolders, parent.ElementId), resolve, reject));
         //const folders: Array<CloudFolder> = Object.setPrototypeOf(await apiPromise /* Wait for the request to be completed */, CloudFolder.prototype)
 
@@ -164,10 +166,12 @@ class ApiInterface {
     }
 
     public async GetChildFiles(parent: CloudFolder): Promise<Array<CloudFile>> {
+        //TODO: Parse manually the json nodes
+
         const apiPromise = new Promise<object>((resolve, reject) => $.getJSON(this.GetUrl(ApiUrls.ChildFiles, parent.ElementId), resolve, reject));
         //const json: Array<any> = await apiPromise
 
-        //const files: Array<CloudFile> = new Array<CloudFile>(json)
+        //const files: Array<CloudFile> = new Array<CloudFile>()
         /*for (const file in await apiPromise) {
 
         }*/
