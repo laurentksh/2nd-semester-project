@@ -79,7 +79,17 @@ namespace _2ndSemesterProject.Areas.Identity.Pages.Account
             if (ModelState.IsValid) {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+
+                AppUser user = await _userManager.FindByEmailAsync(_userManager.NormalizeEmail(Input.Email));
+
+                var users = _userManager.Users.ToList();
+
+                if (user == null) {
+                    ModelState.AddModelError(string.Empty, "An account with this email does not exists");
+                    return Page();
+                }
+
+                var result = await _signInManager.PasswordSignInAsync(user, Input.Password, Input.RememberMe, lockoutOnFailure: true);
 
                 if (result.Succeeded) {
                     _logger.LogInformation("User logged in.");

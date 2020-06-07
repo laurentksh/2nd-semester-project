@@ -1,0 +1,23 @@
+﻿@model CloudFile
+
+@{
+    ViewData["Title"] = "View " + Model.FileNameWithoutExt;
+}
+
+@section Head {
+    <link rel="stylesheet" asp-append-version="true" href="~/css/ViewFile.css" />
+}
+
+@section Scripts {
+    <script>
+        @if (ViewBag.Current != null) {
+            @:window.Current = @ViewBag.Current;
+        }
+    </script>
+
+    <script asp-append-version="true" src="~/ts/FileManager.js" type="text/javascript"></script>
+}
+
+<div class="file-container container">
+
+</div>

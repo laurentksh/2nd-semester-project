@@ -10,7 +10,7 @@ namespace _2ndSemesterProject.Controllers.Api.v1
     [ApiVersion("1.0")]
     [ApiController]
     [Route("api/v{version:apiVersion}/account")]
-    public class AccountController : ControllerBase
+    public class ApiAccountController : ControllerBase
     {
         // GET: api/{version}/account
         [HttpGet]
@@ -23,11 +23,13 @@ namespace _2ndSemesterProject.Controllers.Api.v1
         [HttpGet("{id}")]
         public IActionResult Get(Guid id)
         {
-            using (var context = new ApplicationDbContext()) {
+            /*using (var context = new ApplicationDbContext()) {
                 var user = context.Users.Single(u => u.Id == id);
 
                 return new JsonResult(user);
-            }
+            }*/
+
+            return new BadRequestResult();
         }
 
         // POST api/{version}/account
@@ -39,16 +41,16 @@ namespace _2ndSemesterProject.Controllers.Api.v1
 
         // PUT api/{version}/account/5
         [HttpPut("{id}")]
-        public void Put(Guid id, [FromBody]string value)
+        public IActionResult Put(Guid id, [FromBody]string value)
         {
-
+            return new BadRequestResult();
         }
 
         // DELETE api/{version}/account/5
         [HttpDelete("{id}")]
-        public void Delete(Guid id)
+        public IActionResult Delete(Guid id)
         {
-            using (var context = new ApplicationDbContext())
+            /*using (var context = new ApplicationDbContext())
             {
                 var user = context.Users.Single(u => u.Id == id);
 
@@ -56,7 +58,9 @@ namespace _2ndSemesterProject.Controllers.Api.v1
                     context.Users.Remove(user);
 
                 context.SaveChanges();
-            }
+            }*/
+
+            return new BadRequestResult();
         }
     }
 }

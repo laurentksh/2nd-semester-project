@@ -10,14 +10,14 @@ using _2ndSemesterProject.Data;
 namespace _2ndSemesterProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200511154815_Initial")]
+    [Migration("20200607191716_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3")
+                .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -124,11 +124,15 @@ namespace _2ndSemesterProject.Migrations
 
             modelBuilder.Entity("_2ndSemesterProject.Models.Database.AccountPlan", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<long>("FileSizeLimit")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("FileTransferSize")
                         .HasColumnType("bigint");
 
                     b.Property<long>("GlobalStorageLimit")
@@ -141,6 +145,12 @@ namespace _2ndSemesterProject.Migrations
                         .HasColumnType("real");
 
                     b.Property<float>("PricePerYear")
+                        .HasColumnType("real");
+
+                    b.Property<float>("ReductionPerMonth")
+                        .HasColumnType("real");
+
+                    b.Property<float>("ReductionPerYear")
                         .HasColumnType("real");
 
                     b.Property<int>("State")
@@ -188,8 +198,8 @@ namespace _2ndSemesterProject.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("AccountPlanId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<long>("AccountPlanId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("BirthDay")
                         .HasColumnType("datetime2");
@@ -298,7 +308,7 @@ namespace _2ndSemesterProject.Migrations
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ParentId")
+                    b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("FileId");
@@ -378,6 +388,9 @@ namespace _2ndSemesterProject.Migrations
 
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("HasWritePermission")
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("ReceiverId")
                         .HasColumnType("uniqueidentifier");
@@ -469,9 +482,7 @@ namespace _2ndSemesterProject.Migrations
 
                     b.HasOne("_2ndSemesterProject.Models.Database.CloudFolder", "Parent")
                         .WithMany("Files")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ParentId");
                 });
 
             modelBuilder.Entity("_2ndSemesterProject.Models.Database.CloudFolder", b =>

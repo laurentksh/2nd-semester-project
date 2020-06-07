@@ -9,6 +9,7 @@ using _2ndSemesterProject.Models;
 using System.Globalization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using _2ndSemesterProject.Data;
 
 namespace _2ndSemesterProject.Controllers
 {
@@ -18,10 +19,13 @@ namespace _2ndSemesterProject.Controllers
         private readonly ILogger<HomeController> _logger;   
         private readonly IActionDescriptorCollectionProvider _provider;
 
-        public HomeController(ILogger<HomeController> logger, IActionDescriptorCollectionProvider provider)
+        private ApplicationDbContext _dbContext;
+
+        public HomeController(ILogger<HomeController> logger, IActionDescriptorCollectionProvider provider, ApplicationDbContext dbContext)
         {
             _logger = logger;
             _provider = provider;
+            _dbContext = dbContext;
         }
 
         [Route("")]
@@ -29,6 +33,19 @@ namespace _2ndSemesterProject.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        [Route("Pricing")]
+        public IActionResult Pricing()
+        {
+            PricingModels pricingModels = new PricingModels
+            {
+                FreeTier = _dbContext.AccountPlans.Single(x => x.Name == "Free"),
+                PlusTier = _dbContext.AccountPlans.Single(x => x.Name == "Plus"),
+                ProTier = _dbContext.AccountPlans.Single(x => x.Name == "Pro"),
+            };
+
+            return View(pricingModels);
         }
 
         [Route("Privacy")]

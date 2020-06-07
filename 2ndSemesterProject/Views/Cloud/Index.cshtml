@@ -9,7 +9,7 @@
 @section Scripts {
     <script>
         @if (ViewBag.Current != null) {
-            @:window.Current = @ViewBag.Current;
+            @:window.Current = "@ViewBag.Current";
         }
     </script>
     <script asp-append-version="true" type="text/javascript" src="~/ts/FileManager.js"></script>
@@ -24,7 +24,7 @@
             <div id="fm-sb-folders" class="fm-sb-folders">
                 <!-- Sidebar Folders (Quick access) -->
                 <template id="fm-sb-folder-template">
-                    <div class="card" data-folder-id="%id%">
+                    <div class="card fm-sb-folder" data-folder-id="%id%">
                         <p>%folder-name%</p>
                     </div>
                 </template>
@@ -37,7 +37,6 @@
         </script>
         <div class="fm-content col-xl">
             <div class="fm-container">
-                <input id="fm-input" />
 
                 <!-- File Container -->
                 <div class="row" id="file-container">

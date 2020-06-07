@@ -15,8 +15,17 @@
 
 }
 
-.fm-sb-folders-current {
+.fm-sb-folder {
+    cursor: pointer
+}
 
+.fm-sb-folders-current {
+    background-color: dimgray;
+}
+
+.fm-container {
+    min-height: 400px;
+    background-color: #b0b0b047;
 }
 
 .fm-content {
@@ -41,4 +50,9 @@
 
 .fm-btn-more {
     float: right;
+}
+
+.msg-alert {
+    margin-top: 25px;
+    margin-left: 25px;
 }

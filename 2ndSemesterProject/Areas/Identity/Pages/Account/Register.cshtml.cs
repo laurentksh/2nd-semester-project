@@ -108,10 +108,11 @@ namespace _2ndSemesterProject.Areas.Identity.Pages.Account
                     BirthDay = Input.Birthday,
                     UserName = Input.Username,
                     Email = Input.Email,
-                    AccountPlan = _dbContext.AccountPlans.First()
+                    AccountPlan = _dbContext.AccountPlans.SingleOrDefault(a => a.Name == "Free") //Set the free tier as default
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
                 if (result.Succeeded) {
                     _logger.LogInformation("User created a new account with password.");
 
