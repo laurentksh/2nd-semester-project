@@ -20,6 +20,7 @@ using _2ndSemesterProject.Models.Database;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using SendGrid;
 using _2ndSemesterProject.Services;
+using System.Text.Json;
 
 namespace _2ndSemesterProject
 {
@@ -79,8 +80,8 @@ namespace _2ndSemesterProject
                 options.Lockout.MaxFailedAccessAttempts = 5;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders()
-                .AddUserManager<UserManager<AppUser>>();
+                .AddDefaultTokenProviders();
+                //.AddUserManager<UserManager<AppUser>>();
 
 
             services.ConfigureApplicationCookie(options =>
@@ -98,8 +99,9 @@ namespace _2ndSemesterProject
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.MaxDepth = 128;
+                    options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 });
-
+            
             services.AddRazorPages();
         }
 
@@ -188,6 +190,9 @@ namespace _2ndSemesterProject
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+
+                app.UseResponseCompression();
+                app.UseResponseCaching();
             }
 
             app.UseHttpsRedirection();
@@ -198,6 +203,7 @@ namespace _2ndSemesterProject
             app.UseAuthentication();
             app.UseAuthorization();
 
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

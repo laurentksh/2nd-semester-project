@@ -17,7 +17,7 @@ namespace _2ndSemesterProject.Controllers.Api.v1
 {
     [ApiVersion("1.0")]
     [ApiController]
-    [Route("api/v{version:apiVersion}/cloud")]
+    [Route("/api/v{version:apiVersion}/cloud")]
     public class ApiCloudController : ControllerBase
     {
         private ApplicationDbContext dbContext = null;
@@ -111,7 +111,7 @@ namespace _2ndSemesterProject.Controllers.Api.v1
             return new JsonResult(foldersJson);
         }
 
-        [HttpGet("file/{id}/preview")]
+        [HttpGet("file/{id}/preview", Name = "GetPreviewImage")]
         public async Task<IActionResult> GetPreviewImage(string id) //Done
         {
             AppUser user = await this.GetUser(userManager, dbContext);
@@ -313,9 +313,12 @@ namespace _2ndSemesterProject.Controllers.Api.v1
                 OwnerId = file.OwnerId.ToString(),
                 ParentId = file.ParentId.ToString(),
 
-                DirectUrl = Url.Action(nameof(CloudController.File), nameof(CloudController), file.FileId),
-                DownloadUrl = Url.Action(nameof(DownloadFile), nameof(ApiCloudController), file.FileId),
-                PreviewUrl = Url.Action(nameof(GetPreviewImage), nameof(ApiCloudController), file.FileId),
+                /*DirectUrl = Url.Action(nameof(CloudController.File), nameof(CloudController),  new { id = file.FileId }),
+                DownloadUrl = Url.Action(nameof(DownloadFile), nameof(ApiCloudController), new { id = file.FileId }),
+                PreviewUrl = Url.Action(nameof(GetPreviewImage), nameof(ApiCloudController),  new { id = file.FileId }),*/
+                DirectUrl = $"/My-Cloud/File/{file.FileId}",
+                DownloadUrl = $"/Download/{file.FileId}",
+                PreviewUrl = $"/api/v1/cloud/file/{file.FileId}/preview"
             };
 
             return jsonFile;

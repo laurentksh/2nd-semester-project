@@ -638,3 +638,6 @@ MigrationBackup/
 
 # Libraries LibMan
 2ndSemesterProject/wwwroot/lib/**
+
+# User files
+2ndSemesterProject/UserFiles/**

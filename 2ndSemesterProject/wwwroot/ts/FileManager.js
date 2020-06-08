@@ -35,11 +35,12 @@ function DisplayImage(url, element, showIcons = true) {
     console.log("Loading " + img.src);
     img.src = url;
 }
+//Classes' properties must be Camel Case
 class CloudFile {
     constructor(id) {
         if (id === null)
             throw new TypeError("id must be a string and non-null.");
-        this.ElementId = id;
+        this.elementId = id;
     }
 }
 class CloudFolder {
@@ -49,9 +50,9 @@ class CloudFolder {
      */
     constructor(id) {
         if (id === null)
-            this.ElementId = "root";
+            this.elementId = "root";
         else
-            this.ElementId = id;
+            this.elementId = id;
     }
 }
 class JsonFolderSharedAccess {
@@ -80,64 +81,70 @@ var AlertStyle;
     AlertStyle["Light"] = "alert-light";
     AlertStyle["Dark"] = "alert-dark";
 })(AlertStyle || (AlertStyle = {}));
-class ApiInterface {
-    constructor() {
-        //Perhaps initialize an API token ?
-    }
-    GetUrl(url, id) {
-        if (id === null)
-            return ApiInterface.ApiEndpoint + url;
-        else
-            return ApiInterface.ApiEndpoint + url.replace("{0}", id);
-    }
-    GetChildFolders(parent) {
-        return __awaiter(this, void 0, void 0, function* () {
-            //TODO: Parse manually the json nodes
-            const apiPromise = new Promise((resolve, reject) => $.getJSON(this.GetUrl(ApiUrls.ChildFolders, parent.ElementId), resolve, reject));
-            //const folders: Array<CloudFolder> = Object.setPrototypeOf(await apiPromise /* Wait for the request to be completed */, CloudFolder.prototype)
-            return /*folders;*/ Object.assign(new Array(), yield apiPromise);
-        });
-    }
-    GetChildFiles(parent) {
-        return __awaiter(this, void 0, void 0, function* () {
-            //TODO: Parse manually the json nodes
-            const apiPromise = new Promise((resolve, reject) => $.getJSON(this.GetUrl(ApiUrls.ChildFiles, parent.ElementId), resolve, reject));
-            //const json: Array<any> = await apiPromise
-            //const files: Array<CloudFile> = new Array<CloudFile>()
-            /*for (const file in await apiPromise) {
-    
-            }*/
-            //const files: Array<CloudFile> = Object.setPrototypeOf(await apiPromise, Array<CloudFolder>())
-            return /*files;*/ Object.assign(new Array(), yield apiPromise);
-        });
-    }
-    SendFile(files, parent) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const data = new FormData();
-            data.append("ParentFolder", parent.ElementId);
-            for (const file of files) {
-                data.append("File", file, file.name);
-            }
-            $.ajax({
-                url: this.GetUrl(ApiUrls.FileUpload, null),
-                data: data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: "POST",
-                success: () => {
-                    //Display a sneaky alert to tell the user his files sent correctly.
-                },
-                error: () => {
-                    //Display a sneaky alert to tell the user his files did not sent correctly.
-                    alert("An error occured while sending the file(s).");
+let ApiInterface = /** @class */ (() => {
+    class ApiInterface {
+        constructor() {
+            //Perhaps initialize an API token ?
+        }
+        GetUrl(url, id) {
+            if (id === null)
+                return ApiInterface.ApiEndpoint + url;
+            else
+                return ApiInterface.ApiEndpoint + url.replace("{0}", id);
+        }
+        GetChildFolders(parent) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const apiPromise = new Promise((resolve, reject) => $.getJSON(this.GetUrl(ApiUrls.ChildFolders, parent.elementId), resolve, reject));
+                const folders = new Array();
+                for (const f of yield apiPromise) {
+                    const f2 = new CloudFolder(null);
+                    Object.assign(f2, f);
+                    folders.push(f2);
                 }
+                return folders;
             });
-        });
+        }
+        GetChildFiles(parent) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const apiPromise = new Promise((resolve, reject) => $.getJSON(this.GetUrl(ApiUrls.ChildFiles, parent.elementId), resolve, reject));
+                const files = new Array();
+                for (const f of yield apiPromise) {
+                    const f2 = new CloudFile("");
+                    Object.assign(f2, f);
+                    files.push(f2);
+                }
+                return files;
+            });
+        }
+        SendFile(files, parent) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const data = new FormData();
+                data.append("ParentFolder", parent.elementId);
+                for (const file of files) {
+                    data.append("File", file, file.name);
+                }
+                $.ajax({
+                    url: this.GetUrl(ApiUrls.FileUpload, null),
+                    data: data,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    method: "POST",
+                    success: () => {
+                        //Display a sneaky alert to tell the user his files sent correctly.
+                    },
+                    error: () => {
+                        //Display a sneaky alert to tell the user his files did not sent correctly.
+                        alert("An error occured while sending the file(s).");
+                    }
+                });
+            });
+        }
     }
-}
-ApiInterface.ApiVersion = "v1";
-ApiInterface.ApiEndpoint = "api/" + ApiInterface.ApiVersion + "/cloud/";
+    ApiInterface.ApiVersion = "v1";
+    ApiInterface.ApiEndpoint = "api/" + ApiInterface.ApiVersion + "/cloud/";
+    return ApiInterface;
+})();
 class FileManager {
     constructor() {
         this.Api = new ApiInterface();
@@ -191,7 +198,7 @@ class FileManager {
             let fileParseErrorCount = 0;
             //Load folders first
             for (const folder_ of childFolders) {
-                if (Object.getPrototypeOf(folder_) !== CloudFolder.prototype) {
+                if (folder_ instanceof CloudFolder === false) {
                     folderParseErrorCount++;
                     continue;
                 }
@@ -200,7 +207,7 @@ class FileManager {
             }
             //Load files
             for (const file_ of childFiles) {
-                if (Object.getPrototypeOf(file_) !== CloudFile.prototype) {
+                if (file_ instanceof CloudFile === false) {
                     fileParseErrorCount++;
                     continue;
                 }
@@ -213,13 +220,13 @@ class FileManager {
             this.Current = folder;
             if (childFolders.length !== 0) {
                 //Displays in which folder the user is currently in
-                $("#fm-sb-folders").find(`div[data-folder-id'${folder.ElementId}']`).addClass("fm-sb-folders-current"); //undefined is not a function
+                $("#fm-sb-folders").find(`div[data-folder-id'${folder.elementId}']`).addClass("fm-sb-folders-current"); //undefined is not a function
             }
             if (childFiles.length !== 0) {
                 //Do nothing
             }
             if (childFiles.length === 0 && childFolders.length === 0) { //If there's nothing in the folder.
-                if (folder.ElementId === "root")
+                if (folder.elementId === "root")
                     this.DisplayMessage("Welcome ! This is your root folder. Drag some files here to upload them or create a folder by clicking the + button.", AlertStyle.Success);
                 else
                     this.DisplayMessage("This folder is empty.", AlertStyle.Info);
@@ -239,8 +246,8 @@ class FileManager {
         });
     }
     DownloadFile(file) {
-        console.log("Download clicked (FileId: " + file.ElementId + ")");
-        window.location.href = file.DirectUrl;
+        console.log("Download clicked (FileId: " + file.elementId + ")");
+        window.location.href = file.directUrl;
     }
     // UI methods
     DisplayMessage(message, alertStyle) {
@@ -253,25 +260,25 @@ class FileManager {
         const template = $("#file-template").html();
         const row = $(template);
         row.find("div[data-file-id]")
-            .attr("data-file-id", element.ElementId);
+            .attr("data-file-id", element.elementId);
         const previewImg = row.find("img[id='file-%id%-imgpreview']");
-        previewImg.attr("id", `file-${element.ElementId}-imgpreview`)
-            .attr("alt", element.FileName + " - Preview");
-        row.find("h5").text(element.FileName);
-        row.find("h6").text(element.FileInfo);
+        previewImg.attr("id", `file-${element.elementId}-imgpreview`)
+            .attr("alt", element.fileName + " - Preview");
+        row.find("h5").text(element.fileName);
+        row.find("h6").text(element.fileInfo);
         row.find("a[id='file-%id%-download']")
-            .attr("id", `file-${element.ElementId}-download`)
+            .attr("id", `file-${element.elementId}-download`)
             .click(() => this.DownloadFile(element));
         row.find("a[id='file-%id%-more']")
-            .attr("id", `file-${element.ElementId}-more`);
+            .attr("id", `file-${element.elementId}-more`);
         if (append)
             $("#file-container").append(row);
         else
             $("#file-container").prepend(row);
-        if (element.PreviewUrl === null || element.PreviewUrl === "undefined")
+        if (element.previewUrl === null || element.previewUrl === "undefined")
             DisplayImage(ImgFailedLoadingUrl, previewImg, true);
         else
-            DisplayImage(element.PreviewUrl, previewImg, true);
+            DisplayImage(element.previewUrl, previewImg, true);
     }
     AddFolderToMain(element, append) {
         //TODO
@@ -280,8 +287,8 @@ class FileManager {
         const template = $("#fm-sb-folder-template").html();
         const row = $(template);
         row.find("div[data-folder-id='%id%']")
-            .attr("data-folder-id", element.ElementId);
-        row.find("p").text(element.FolderName);
+            .attr("data-folder-id", element.elementId);
+        row.find("p").text(element.folderName);
         row.click(() => this.LoadFolder(element));
         this.AddUploadEvents(row, element);
         if (append)
@@ -327,10 +334,10 @@ $(document).ready(() => {
     $("#debug").click(() => {
         console.log("debug clicked");
         const file = new CloudFile("3B07DD9A-DC09-48E2-B304-E328B9F2AD" + i);
-        file.FileName = "test-file.png " + i++;
-        file.FileInfo = "PNG Image - 5KB";
+        file.fileName = "test-file.png " + i++;
+        file.fileInfo = "PNG Image - 5KB";
         //file.PreviewUrl = "/api/v1/cloud/preview/" + file.ElementId;
-        file.PreviewUrl = ImgPreviewUrl;
+        file.previewUrl = ImgPreviewUrl;
         fm.AddFileToMain(file, true);
         const folder = new CloudFolder(null); //root
         fm.AddFolderToSidebar(folder, true);

@@ -12,7 +12,7 @@
             @:window.Current = "@ViewBag.Current";
         }
     </script>
-    <script asp-append-version="true" type="text/javascript" src="~/wwwroot/js/json2.js"></script>
+    <script asp-append-version="true" type="text/javascript" src="~/js/json2.js"></script>
     <script asp-append-version="true" type="text/javascript" src="~/ts/FileManager.js"></script>
 }
 
@@ -24,11 +24,6 @@
             </div>
             <div id="fm-sb-folders" class="fm-sb-folders">
                 <!-- Sidebar Folders (Quick access) -->
-                <template id="fm-sb-folder-template">
-                    <div class="card fm-sb-folder" data-folder-id="%id%">
-                        <p>%folder-name%</p>
-                    </div>
-                </template>
 
                 <button id="debug">Debug</button>
             </div>
@@ -42,27 +37,45 @@
                 <!-- File Container -->
                 <div class="row" id="file-container">
                     <!-- Files -->
-
-                    <template id="file-template">
-                        <div class="col fm-file" data-file-id="%id%">
-                            <div class="card">
-                                <img id="file-%id%-imgpreview" src="%FILE_PREVIEW_URL%" class="card-img-top" alt="%FILE_NAME% - Preview" />
-
-                                <div class="card-body">
-                                    <h5 class="card-title">%FILE_NAME%</h5>
-                                    <h6 class="card-subtitle">%FILE_INFO%</h6>
-                                </div>
-
-                                <div class="card-body">
-                                    <a id="file-%id%-download" class="btn btn-primary card-link fm-btn-download"><i class="fas fa-file-download"></i></a>
-                                    <a id="file-%id%-more" class="btn btn-outline-secondary card-link fm-btn-more"><i class="fas fa-ellipsis-h"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<template id="fm-sb-folder-template">
+    <div class="card fm-sb-folder" data-folder-id="%id%">
+        <p>%folder-name%</p>
+    </div>
+</template>
+
+<template id="folder-template">
+    <div class="col fm-folder" data-folder-id="%id%">
+        <div class="card">
+            <img id="folder-imgpreview" src="~/wwwroot/images/folder_preview.svg" />
+
+            <div class="card-header">
+                <h3>%FOLDER_NAME%</h3>
+            </div>
+        </div>
+
+    </div>
+</template>
+
+<template id="file-template">
+    <div class="col fm-file" data-file-id="%id%">
+        <div class="card">
+            <img id="file-%id%-imgpreview" src="%FILE_PREVIEW_URL%" class="card-img-top" alt="%FILE_NAME% - Preview" />
+
+            <div class="card-body">
+                <h5 class="card-title">%FILE_NAME%</h5>
+                <h6 class="card-subtitle">%FILE_INFO%</h6>
+            </div>
+
+            <div class="card-body">
+                <a id="file-%id%-download" class="btn btn-primary card-link fm-btn-download"><i class="fas fa-file-download"></i></a>
+                <a id="file-%id%-more" class="btn btn-outline-secondary card-link fm-btn-more"><i class="fas fa-ellipsis-h"></i></a>
+            </div>
+        </div>
+    </div>
+</template>
