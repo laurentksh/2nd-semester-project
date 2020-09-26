@@ -247,7 +247,7 @@ class FileManager {
     }
     DownloadFile(file) {
         console.log("Download clicked (FileId: " + file.elementId + ")");
-        window.location.href = file.directUrl;
+        window.location.href = file.downloadUrl;
     }
     // UI methods
     DisplayMessage(message, alertStyle) {
@@ -281,7 +281,16 @@ class FileManager {
             DisplayImage(element.previewUrl, previewImg, true);
     }
     AddFolderToMain(element, append) {
-        //TODO
+        const template = $("#folder-template").html();
+        const row = $(template);
+        row.find("div[data-folder-id]")
+            .attr("data-folder-id", element.elementId);
+        row.find("h3").text(element.folderName);
+        row.find("h4").text(element.folderInfo);
+        if (append)
+            $("#folder-container").append(row);
+        else
+            $("#folder-container").prepend(row);
     }
     AddFolderToSidebar(element, append) {
         const template = $("#fm-sb-folder-template").html();

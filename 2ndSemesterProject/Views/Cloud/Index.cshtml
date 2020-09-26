@@ -33,6 +33,10 @@
         </script>
         <div class="fm-content col-xl">
             <div class="fm-container">
+                <!-- Folder container -->
+                <div class="row" id="folder-container">
+                    <!-- Folders -->
+                </div>
 
                 <!-- File Container -->
                 <div class="row" id="file-container">
@@ -55,7 +59,8 @@
             <img id="folder-imgpreview" src="~/wwwroot/images/folder_preview.svg" />
 
             <div class="card-header">
-                <h3>%FOLDER_NAME%</h3>
+                <h3 class="card-title">%FOLDER_NAME%</h3>
+                <h4 class="card-subtitle">%FOLDER_DESC%</h4>
             </div>
         </div>
 
@@ -67,7 +72,7 @@
         <div class="card">
             <img id="file-%id%-imgpreview" src="%FILE_PREVIEW_URL%" class="card-img-top" alt="%FILE_NAME% - Preview" />
 
-            <div class="card-body">
+            <div class="card-header">
                 <h5 class="card-title">%FILE_NAME%</h5>
                 <h6 class="card-subtitle">%FILE_INFO%</h6>
             </div>

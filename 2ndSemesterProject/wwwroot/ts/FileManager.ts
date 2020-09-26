@@ -329,7 +329,7 @@ class FileManager {
     public DownloadFile(file: CloudFile) {
         console.log("Download clicked (FileId: " + file.elementId + ")")
 
-        window.location.href = file.directUrl;
+        window.location.href = file.downloadUrl;
     }
 
 
@@ -377,7 +377,19 @@ class FileManager {
     }
 
     public AddFolderToMain(element: CloudFolder, append: boolean) {
-        //TODO
+        const template = $("#folder-template").html();
+        const row = $(template);
+
+        row.find("div[data-folder-id]")
+            .attr("data-folder-id", element.elementId);
+
+        row.find("h3").text(element.folderName);
+        row.find("h4").text(element.folderInfo);
+
+        if (append)
+            $("#folder-container").append(row);
+        else
+            $("#folder-container").prepend(row)
     }
 
     public AddFolderToSidebar(element: CloudFolder, append: boolean) {

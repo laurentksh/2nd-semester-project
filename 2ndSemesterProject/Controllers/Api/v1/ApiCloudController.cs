@@ -177,6 +177,9 @@ namespace _2ndSemesterProject.Controllers.Api.v1
                 toDownload.AddRange(GetFilesInRootFolder(user, dbContext));
             }
 
+            if (toDownload.Count == 0)
+                return new NotFoundResult();
+
             using (var zipArchive = new ZipArchive(archive, ZipArchiveMode.Create, true)) {
                 foreach (CloudFile file in toDownload) {
                     zipArchive.CreateEntryFromFile(FileSystemMiddleman.GetAbsolutePath(file), file.FileName, CompressionLevel.Fastest);
@@ -305,7 +308,7 @@ namespace _2ndSemesterProject.Controllers.Api.v1
                 ElementId = file.FileId.ToString(),
                 FileName = file.FileName,
                 FileNameWithoutExt = file.FileNameWithoutExt,
-                FileInfo = $"{file.FileExtension.ToUpper()} file - {file.FileSize} MB", //TODO: Create a file type guesser function.
+                FileInfo = $"{file.FileExtension.ToUpper()} file - {SizeSuffix(file.FileSize)}", //TODO: Create a file type guesser function.
                 CreationDate = file.CreationDate,
                 LastEditDate = file.LastEditDate,
                 IsPublic = file.IsPublic,
@@ -313,9 +316,6 @@ namespace _2ndSemesterProject.Controllers.Api.v1
                 OwnerId = file.OwnerId.ToString(),
                 ParentId = file.ParentId.ToString(),
 
-                /*DirectUrl = Url.Action(nameof(CloudController.File), nameof(CloudController),  new { id = file.FileId }),
-                DownloadUrl = Url.Action(nameof(DownloadFile), nameof(ApiCloudController), new { id = file.FileId }),
-                PreviewUrl = Url.Action(nameof(GetPreviewImage), nameof(ApiCloudController),  new { id = file.FileId }),*/
                 DirectUrl = $"/My-Cloud/File/{file.FileId}",
                 DownloadUrl = $"/Download/{file.FileId}",
                 PreviewUrl = $"/api/v1/cloud/file/{file.FileId}/preview"
@@ -337,8 +337,8 @@ namespace _2ndSemesterProject.Controllers.Api.v1
                 OwnerId = folder.OwnerId.ToString(),
                 ParentId = folder.ParentId.ToString(),
 
-                DirectUrl = Url.Action(nameof(CloudController), nameof(CloudController.Folder), folder.FolderId),
-                DownloadUrl = Url.Action(nameof(DownloadFolder), nameof(ApiCloudController), folder.FolderId),
+                DirectUrl = $"/My-Cloud/Folder/{folder.FolderId}",
+                DownloadUrl = $"/api/v1/cloud/folder/{folder.FolderId}/download",
             };
         }
 
@@ -368,33 +368,31 @@ namespace _2ndSemesterProject.Controllers.Api.v1
             if (user == null)
                 return false;
 
-            //Boilerplate code for checking if the user is allowed to download the file
-            if (!User.Identity.IsAuthenticated && !file.IsPublic)
-                return false;
-            else {
-                //Check if the current user has the permission to download the file
+            //Check if the current user has the permission to download the file
 
-                FolderSharedAccess fsa = dbContext.FolderSharedAccesses
-                    .Where(a => a.ReceiverId == user.Id)
-                    .Where(a2 => a2.SharedFolderId == file.ParentId)
-                    .FirstOrDefault();
+            if (file.OwnerId == user.Id)
+                return true;
 
-                FileSharedAccess fsa2 = dbContext.FileSharedAccesses
-                    .Where(b => b.ReceiverId == user.Id)
-                    .Where(b2 => b2.SharedFileId == file.FileId)
-                    .FirstOrDefault();
+            FolderSharedAccess fsa = dbContext.FolderSharedAccesses
+                .Where(a => a.ReceiverId == user.Id)
+                .Where(a2 => a2.SharedFolderId == file.ParentId)
+                .FirstOrDefault();
 
-                bool fsaValid = false;
-                bool fsa2Valid = false;
+            FileSharedAccess fsa2 = dbContext.FileSharedAccesses
+                .Where(b => b.ReceiverId == user.Id)
+                .Where(b2 => b2.SharedFileId == file.FileId)
+                .FirstOrDefault();
 
-                if (fsa != null)
-                    fsaValid = fsa.ExpirationDate > DateTime.UtcNow || fsa.ExpirationDate == DateTime.MinValue;
+            bool fsaValid = false;
+            bool fsa2Valid = false;
 
-                if (fsa2 != null)
-                    fsa2Valid = fsa2.ExpirationDate > DateTime.UtcNow || fsa2.ExpirationDate == DateTime.MinValue;
+            if (fsa != null)
+                fsaValid = fsa.ExpirationDate > DateTime.UtcNow || fsa.ExpirationDate == DateTime.MinValue;
 
-                return fsaValid || fsa2Valid;
-            }
+            if (fsa2 != null)
+                fsa2Valid = fsa2.ExpirationDate > DateTime.UtcNow || fsa2.ExpirationDate == DateTime.MinValue;
+
+            return fsaValid || fsa2Valid;
         }
 
         [NonAction]
@@ -406,24 +404,54 @@ namespace _2ndSemesterProject.Controllers.Api.v1
             if (user == null)
                 return false;
 
-            //Boilerplate code for checking if the user is allowed to access the folder
-            if (!User.Identity.IsAuthenticated && !folder.IsPublic)
-                return false;
-            else {
-                //Check if the current user has the permission to access the folder
+            //Check if the current user has the permission to access the folder
 
-                FolderSharedAccess fsa = dbContext.FolderSharedAccesses
-                    .Where(a => a.ReceiverId == user.Id)
-                    .Where(a2 => a2.SharedFolderId == folder.ParentId)
-                    .FirstOrDefault();
+            if (folder.OwnerId == user.Id)
+                return true;
 
-                bool fsaValid = false;
+            FolderSharedAccess fsa = dbContext.FolderSharedAccesses
+                .Where(a => a.ReceiverId == user.Id)
+                .Where(a2 => a2.SharedFolderId == folder.FolderId)
+                .FirstOrDefault();
 
-                if (fsa != null)
-                    fsaValid = fsa.ExpirationDate > DateTime.UtcNow || fsa.ExpirationDate == DateTime.MinValue;
+            bool fsaValid = false;
 
-                return fsaValid;
-            }
+            if (fsa != null)
+                fsaValid = fsa.ExpirationDate > DateTime.UtcNow || fsa.ExpirationDate == DateTime.MinValue;
+
+            return fsaValid;
         }
+
+        static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+
+        [NonAction]
+        static string SizeSuffix(long value, int decimalPlaces = 1)
+        {
+            if (decimalPlaces < 0)
+                throw new ArgumentOutOfRangeException(nameof(decimalPlaces));
+            if (value < 0)
+                return "-" + SizeSuffix(-value);
+            if (value == 0)
+                return string.Format("{0:n" + decimalPlaces + "} bytes", 0);
+
+            // mag is 0 for bytes, 1 for KB, 2, for MB, etc.
+            int mag = (int)Math.Log(value, 1024);
+
+            // 1L << (mag * 10) == 2 ^ (10 * mag) 
+            // [i.e. the number of bytes in the unit corresponding to mag]
+            decimal adjustedSize = (decimal)value / (1L << (mag * 10));
+
+            // make adjustment when the value is large enough that
+            // it would round up to 1000 or more
+            if (Math.Round(adjustedSize, decimalPlaces) >= 1000) {
+                mag += 1;
+                adjustedSize /= 1024;
+            }
+
+            return string.Format("{0:n" + decimalPlaces + "} {1}",
+                adjustedSize,
+                SizeSuffixes[mag]);
+        }
+
     }
 }
